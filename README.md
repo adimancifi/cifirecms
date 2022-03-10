@@ -1,2 +1,0 @@
-# cifirecms
-my local repository
