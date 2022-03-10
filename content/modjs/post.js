@@ -1,4 +1,3 @@
-
 var DataTable = $('#DataTable').DataTable({
 	'language': {
 		'url': datatable_lang,
@@ -24,13 +23,11 @@ var DataTable = $('#DataTable').DataTable({
 	],
 	'ajax': {
 		'type': 'POST',
-		'url': admin_url + a_mod + '/data-table',
-		// data: csrfData
+		'url': window.location.href
 	},
 	'drawCallback': function( settings ) {
 		var api_table = this.api();
 		dataTableDrawCallback(); // standard setting
-
 
 		$('.delete_single').on('click', function(i) {
 			var data_pk = [];
@@ -74,7 +71,6 @@ var DataTable = $('#DataTable').DataTable({
 		});
 	}
 });
-
 
 $('input:not(textarea)').keydown(function(event){
 	var a = event.witch || event.keyCode;
@@ -127,7 +123,6 @@ $('#form_update').on('submit',function(event){
 	})
 	return false;
 });
-
 
 var tagName = new Bloodhound({
 	datumTokenizer: Bloodhound.tokenizers.obj.whitespace('title'),
@@ -187,16 +182,20 @@ $('#publishdate').datetimepicker({
 	icons: {
 		previous: 'icon-arrow-left8',
 		next: 'icon-arrow-right8',
-		today: 'icon-calendar3',
+		today: 'fa fa-calendar-check-o',
 		clear: 'icon-bin',
 	},
 });
 
 $('#publishtime').datetimepicker({
 	format: 'HH:mm:ss',
+	showTodayButton: true,
+	showClear: true,
 	icons: {
 		up: 'icon-arrow-up7',
 		down: 'icon-arrow-down7',
+		today: 'fa fa-clock-o',
+		clear: 'icon-bin',
 	},
 });
 
@@ -205,6 +204,4 @@ $('#delpict').on('click',function(){
 	$('#imgprv').attr('src', site_url + 'content/images/noimage.jpg');
 });
 
-// load TnyMCE
-cfTnyMCE('#Content');
-
+cfTnyMCE('#Content'); // load TnyMCE

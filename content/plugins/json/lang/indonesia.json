@@ -21,5 +21,22 @@
 	"add_success"   : "Data telah berhasil ditambahkan",
 	"update_success": "Data telah berhasil diperbarui",
 	"delete_success": "Data telah berhasil dihapus"
+  },
+  
+  "compogen":
+  {
+    "button" :
+    {
+        "next"     : "Berikutnya",
+        "prev"     : "Sebelumnya",
+        "generate" : "Buat Kompnen"
+    }
+  },
+  
+  "validation":
+  {
+	"required"   : "Tidak boleh kosong.",
+    "minlength"  : "Harus lebih dari {0} karakter.",
+    "maxlength"  : "Harus kurang dari {0} karakter."
   }
 }

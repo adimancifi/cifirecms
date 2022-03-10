@@ -8,20 +8,17 @@ class Contact extends Web_controller {
 		parent::__construct();
 		
 		$this->load->model('web/contact_model');
+		$this->meta_title('Contact');
 	}
 	
 	
 	public function index()
 	{
-		$this->set_meta(array(
-			'title' => "Contact"
-		));
-
-		if ($_SERVER['REQUEST_METHOD'] === 'POST')
-		{			
-			if (googleCaptcha()->success == FALSE)
+		if ( $_SERVER['REQUEST_METHOD'] == 'POST' )
+		{
+			if ( googleCaptcha()->success == TRUE )
 			{
-				$form_rules = array(
+				$this->form_validation->set_rules(array(
 					array(
 						'field' => 'name_contact',
 						'label' => 'name',
@@ -42,11 +39,9 @@ class Contact extends Web_controller {
 						'label' => 'message',
 						'rules' => 'required'
 					),
-				);
+				));
 
-				$this->form_validation->set_rules($form_rules);
-
-				if ($this->form_validation->run() == TRUE) 
+				if ( $this->form_validation->run() ) 
 				{
 					$data_contact = array(
 						'name'    => xss_filter($this->input->post('name_contact')),
@@ -59,9 +54,9 @@ class Contact extends Web_controller {
 					);
 
 					$this->contact_model->insert($data_contact);
-					$this->alert->set('contact', 'success', 'Succes');
 
-					$this->load->library('email', $this->settings->email_config());
+					$this->load->library('email');
+					$this->email->initialize($this->settings->email_config());
 					$this->email->set_newline("\r\n");
 					$this->email->from(
 					                   $this->settings->website('web_email'),
@@ -72,13 +67,13 @@ class Contact extends Web_controller {
 					$this->email->message("Thanks to contact our website !");
 					$this->email->send();
 
-
-					redirect(site_url(uri_string()));
+					$this->alert->set('contact', 'success', 'Succes');
+					redirect(uri_string());
 				}
 				else
 				{
 					$this->alert->set('contact', 'danger', validation_errors());
-					redirect(site_url(uri_string()));
+					redirect(uri_string());
 				}
 			}
 
@@ -94,4 +89,4 @@ class Contact extends Web_controller {
 			$this->render_view('contact', $this->vars);
 		}
 	}
-} // end class
+} // End class.

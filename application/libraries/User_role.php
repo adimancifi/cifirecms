@@ -1,18 +1,4 @@
 <?php 
-/**
- *
- * - File    : User_role.php
- * - License : MIT License
- * - Author  : ViRa
- *
- * - Contoh pengunaan :
- *   user_role->access('user', 'module', 'read_access');
- *   user_role->access('user', 'module', 'write_access');
- *   user_role->access('user', 'module', 'upadate_access');
- *   user_role->access('user', 'module', 'delete_access');
- * 
-*/
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class User_role {
@@ -23,27 +9,6 @@ class User_role {
 	} 
 
 
-	/**
-	 * 
-	 * - access
-	 *
-	 * @param  int     $level
-	 * @param  string  $module
-	 * @param  string  $mode
-	 * @return bol
-	 * 
-	 *
-	 * access('user', 'module', 'read_access');
-	 * access('user', 'module', 'write_access');
-	 * access('user', 'module', 'upadate_access');
-	 * access('user', 'module', 'delete_access');
-	 *
-	 * - Access List:
-	 *    read_access
-	 *    write_access
-	 *    upadate_access
-	 *    delete_access
-	*/
 	public function access($level, $module, $mode)
 	{
 		$user_role = $this->CI->db
@@ -69,5 +34,4 @@ class User_role {
 		
 		return FALSE;
 	}
-
 } // End class

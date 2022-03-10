@@ -17,14 +17,14 @@
 </div>
 
 <div class="content">
-
-	<?=$this->alert->show($this->mod);?>
+	
+	<?php echo $this->alert->show($this->mod);?>
 
 	<div class="block">
 		<div class="block-header">
-			<h3><?=lang_line('mod_title_all');?></h3>
+			<h3><?php echo lang_line('mod_title_all');?></h3>
 			<div class="btn-titleX pull-right">
-				<a href="<?=admin_url($this->mod.'/add-new');?>" class="button btn-sm btn-primary"><i class="icon-add"></i> <?=lang_line('button_add_new');?></a>
+				<a href="<?php echo admin_url($this->mod.'/add-new');?>" class="button btn-sm btn-primary"><i class="icon-add"></i> <?php echo lang_line('button_add_new');?></a>
 			</div>
 		</div>
 		<div class="row">
@@ -34,19 +34,19 @@
 						<thead>
 							<tr>
 								<th class="no-sort text-center">
-									<input type="checkbox" class="select_all" data-toggle="tooltip" data-placement="top" data-title="<?=lang_line('tooltip_select_all');?>">
+									<input type="checkbox" class="select_all" data-toggle="tooltip" data-placement="top" data-title="<?php echo lang_line('tooltip_select_all');?>">
 								</th>
-								<th><?=lang_line('table_title');?></th>
-								<th><?=lang_line('table_seotitle');?></th>
-								<th><?=lang_line('table_parent');?></th>
+								<th><?php echo lang_line('table_title');?></th>
+								<th><?php echo lang_line('table_seotitle');?></th>
+								<th><?php echo lang_line('table_parent');?></th>
 								<th>Status</th>
-								<th class="th-action text-center"><?=lang_line('table_action');?></th>
+								<th class="th-action text-center"><?php echo lang_line('table_action');?></th>
 							</tr>
 						</thead>
 						<tbody></tbody>
 						<tr id="delall">
 							<td colspan="6">
-								<button type="button" class="button btn-sm btn-default text-danger delete_multi"><i class="icon-bin"></i> <?=lang_line('button_delete_selected_item');?></button>
+								<button type="button" class="button btn-sm btn-default text-danger delete_multi"><i class="icon-bin"></i> <?php echo lang_line('button_delete_selected_item');?></button>
 							</td>
 						</tr>
 					</table>

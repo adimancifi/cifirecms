@@ -1,4 +1,10 @@
 <?php 
+/**
+ * Class Menu
+ * Original script from PopojiCMS
+ * Edited by Adiman
+*/
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Menu {
@@ -9,26 +15,12 @@ class Menu {
 	public function __construct()
 	{		
 		$this->CI =& get_instance();
-		// $this->CI->load->database();
 		$this->_url = site_url();
 		$this->admin_url = admin_url();
 	}
 
 
 
-	/**
-	 * - FrontEnd
-	 *
-	 * - Get menu from database, and generate html nested list
-	 *
-	 * @param  int     $group_id
-	 * @param  string  $ul_attr
-	 * @param  string  $li_attrs
-	 * @param  string  $a_attr
-	 * @param  string  $li_ul_attr
-	 * @param  string  $ul_li_a_ul_li
-	 * @return string
-	*/
 	public function front_menu($group_id, $ul_attr = '', $li_attrs = '', $a_attr ='', $li_ul_attr = '', $ul_li_a_ul_li = '')
 	{
 		global $_;
@@ -61,6 +53,9 @@ class Menu {
 				$a_attr2 = trim($pecah[1]);
 				$a_attr2 = html_entity_decode($a_attr2);
 			}
+			$pecah_url = explode('==', $row['url']);
+			$count_url = count($pecah_url)-1;
+			$href = ( $count_url == 1 ? $pecah_url[1] : site_url($pecah_url[0]));
 
 			if ($row['parent_id'] == 0) 
 			{
@@ -68,13 +63,13 @@ class Menu {
 				{
 					$label = '<a ' . $a_class . ' ' . $a_attr . ' ' . $a_attr2 .'  href="">';
 				}
-				elseif($row['url'] == '#')
+				elseif ($row['url'] == '#')
 				{
 					$label = '<a ' . $a_class . ' ' . $a_attr . ' ' . $a_attr2 .'  href="#">';
 				}
 				else
 				{
-					$label = '<a ' . $a_class . ' ' . $a_attr . ' ' . $a_attr2 .'  href="' . site_url($row['url']) .'" >';
+					$label = '<a ' . $a_class . ' ' . $a_attr . ' ' . $a_attr2 .'  href="' . $href .'" >';
 				}
 			} 
 			else 
@@ -89,7 +84,7 @@ class Menu {
 				}
 				else 
 				{
-					$label = '<a '.$a_class.' href="' . site_url($row['url']) .'">';
+					$label = '<a '.$a_class.' href="' . $href .'">';
 				}
 			}
 
@@ -184,25 +179,6 @@ class Menu {
 
 
 
-
-
-
-
-
-
-
-
-	/**
-	 * - Dashboard
-	 * 
-	 * - Get menu from database, and generate html nested list
-	 *
-	 * @param int $group_id
-	 * @param string $attr
-	 * @param string $attrs
-	 * @param string $attrss
-	 * @return string
-	*/
 	public function dashboard_menu($group_id, $ul_attr = '', $li_attrs = '', $a_attr ='', $li_ul_attr = '', $ul_li_a_ul_li = '')
 	{
 		global $_;
@@ -350,10 +326,7 @@ class Menu {
 	}
 
 
-	/**
-	 * Clear the temporary data
-	 *
-	*/
+
 	public function clear()
 	{
 		$this->vardata = array();

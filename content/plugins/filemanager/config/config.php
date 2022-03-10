@@ -3,19 +3,19 @@ require_once ('init.php');
 
 $version = "9.14.0";
 
-$medium_width = 300;
-$medium_height = 180;
-
-$server_link = preg_replace("/\/content\/plugins\/filemanager\/(dialog\.php$)/","",$_SERVER['PHP_SELF']);
-
 if (session_id() == '') {
     session_start();
 }
 
 if (!$_SESSION['log_admin']['access']) {
-    header("Location:$server_link/not-found-404");
+    require_once "index.html";
     exit;
 } 
+elseif ($_SESSION['log_admin']['level'] > 3) {
+    require_once "index.html";
+    exit;
+}
+
 else {
 
 mb_internal_encoding('UTF-8');
@@ -27,8 +27,10 @@ ob_start('mb_output_handler');
 date_default_timezone_set('Europe/Rome');
 setlocale(LC_CTYPE, 'en_US'); //correct transliteration
 
+$server_link = preg_replace("/\/content\/plugins\/filemanager\/(dialog\.php$)/","",$_SERVER['PHP_SELF']);
 
-
+$medium_width = 640;
+$medium_height = 426;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,7 +284,6 @@ $config = array(
     //Add ?484899493349 (time value) to returned images to prevent cache
     'add_time_to_img'                       => true,
 
-
     //*******************************************
     //Images limit and resizing configuration
     //*******************************************
@@ -346,7 +347,7 @@ $config = array(
     // YOU CAN ALSO PASS THIS PARAMETERS USING SESSION VAR => $_SESSION['RF']["VIEW"]=
     //
     //******************
-    'default_view'                            => 0,
+    'default_view'                            => 2,
 
     //set if the filename is truncated when overflow first row
     'ellipsis_title_after_first_row'          => true,
@@ -503,7 +504,7 @@ $config = array(
     //The filter and sorter are managed through both javascript and php scripts because if you have a lot of
     //file in a folder the javascript script can't sort all or filter all, so the filemanager switch to php script.
     //The plugin automatic swich javascript to php when the current folder exceeds the below limit of files number
-    'file_number_limit_js' => 50,
+    'file_number_limit_js' => 12,
 
     //**********************
     // Hidden files and folders
@@ -516,7 +517,7 @@ $config = array(
     /*******************
     * URL upload
     *******************/
-    'url_upload' => true,
+    'url_upload' => false,
 
 
     //************************************

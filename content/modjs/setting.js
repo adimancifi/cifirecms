@@ -1,4 +1,3 @@
-
 var sFileUpload = function() {
     // Bootstrap file upload
     var _FileUpload = function() {
@@ -20,9 +19,6 @@ var sFileUpload = function() {
             '    </div>\n' +
             '  </div>\n' +
             '</div>\n';
-
-
-
 
         $('.file-input').fileinput({
             // browseLabel: 'Browse',
@@ -64,9 +60,6 @@ var sFileUpload = function() {
 				indicatorLoading: '<i class="icon-spinner2 spinner text-muted"></i>'
 			}
         });
-
-
-
     };
 
     // Return objects assigned to module
@@ -76,10 +69,10 @@ var sFileUpload = function() {
         }
     }
 }();
+
 document.addEventListener('DOMContentLoaded', function() {
     sFileUpload.init();
 });
-
 
 $.fn.editable.defaults.mode = 'inline';
 
@@ -88,7 +81,6 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-
 	$('#website_name').editable({
 		validate: function(value) {
 			if($.trim(value) == '') {
@@ -102,7 +94,6 @@ $(document).ready(function(){
 		}
 	});
 
-
 	$('#website_url').editable({
 		validate: function(value) {
 			if($.trim(value) == '') {
@@ -115,7 +106,6 @@ $(document).ready(function(){
 			return params;
 		}
 	});
-
 
 	$('#meta_description').editable({
 		rows: 4,
@@ -131,8 +121,7 @@ $(document).ready(function(){
 		}
 	});
 
-
-	$('#meta_keyword').editable({
+	$('#meta_keyword').editable( {
 		validate: function(value) {
 			if($.trim(value) == '') {
 				var text = $(this).attr('data-msg');
@@ -144,7 +133,6 @@ $(document).ready(function(){
 			return params;
 		}
 	});
-
 
 	$('#web_email').editable({
 		validate: function(value) {
@@ -193,6 +181,17 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#visitors').editable({
+		source: [
+			{value: 'N', text: 'N'},
+			{value: 'Y', text: 'Y'}
+		],
+		params: function(params) {
+			params.csrf_name = csrfToken;
+			return params;
+		}
+	});
+
 	$('#maintenance').editable({
 		source: [
 			{value: 'N', text: 'N'},
@@ -221,6 +220,7 @@ $(document).ready(function(){
 			{value: 'Y', text: 'Y'}
 		]
 	});
+
 	$('#cache_time').editable({
 		source: [
 			{value: '1', text: '1 Minutes'},
@@ -236,8 +236,6 @@ $(document).ready(function(){
 		]
 	});
 
-
-
 	$('#page_item').editable({
 		validate: function(value) {
 			if($.trim(value) == '') {
@@ -251,7 +249,6 @@ $(document).ready(function(){
 		}
 	});
 
-	
 	$('#recaptcha_site_key').editable({
 		params: function(params) {
 			params.csrf_name = csrfToken;
@@ -289,18 +286,21 @@ $(document).ready(function(){
 			return params;
 		}
 	});
+
 	$('#username').editable({
 		params: function(params) {
 			params.csrf_name = csrfToken;
 			return params;
 		}
 	});
+
 	$('#password').editable({
 		params: function(params) {
 			params.csrf_name = csrfToken;
 			return params;
 		}
 	});
+
 	$('#port').editable({
 		params: function(params) {
 			params.csrf_name = csrfToken;
@@ -308,7 +308,6 @@ $(document).ready(function(){
 		}
 	});
 });
-
 
 $(document).ready(function(){
 	function getJsonCountry(){
@@ -323,6 +322,7 @@ $(document).ready(function(){
 		});
 		return Country;
 	}
+
 	$('#country').editable({
 		source: getJsonCountry(),
 		select2: {
@@ -337,7 +337,6 @@ $(document).ready(function(){
 	});
 });
 
-
 $(document).ready(function(){
 	function getJsonTimezone(){
 		var a = [];
@@ -351,6 +350,7 @@ $(document).ready(function(){
 		});
 		return a;
 	}
+
 	$('#timezone').editable({
 		source: getJsonTimezone(),
 		select2: {
@@ -362,7 +362,6 @@ $(document).ready(function(){
 		}
 	});
 });
-
 
 $(document).ready(function(){
 	function getWeblanguage(){
@@ -398,6 +397,7 @@ $(document).ready(function(){
 		});
 		return SlugUrl;
 	}
+
 	$('#slug_url').editable({
 		source: getSlugUrl(),
 		select2: {
@@ -417,11 +417,9 @@ $(document).ready(function(){
 	});
 });
 
-
 $(document).ready(function(){
 	$('.fupload').on('input',function() {
 		var f = $(this)[0].files[0];
-
 		if (f.type == 'image/png' || f.type == 'image/jpeg') {
 			$('.fav').val(f.name);
 		} else {
@@ -433,7 +431,6 @@ $(document).ready(function(){
 
 	$('.lupload').on('input',function() {
 		var f = $(this)[0].files[0];
-
 		if (f.type == 'image/png' || f.type == 'image/jpeg') {
 			$('.logm').val(f.name);
 		} else {
@@ -443,7 +440,6 @@ $(document).ready(function(){
 		};
 	});
 });
-
 
 $(document).ready(function(){
 	var editor = CodeMirror.fromTextArea(document.getElementById("code_metasocial"), {
@@ -481,9 +477,7 @@ $(document).ready(function(){
 			dataType: 'json',
 			success:function(data) {
 				cfNotif(data['alert']);
-
 				$("#form-meta").fadeIn(200);
-
 				editor.refresh();
 			}
 		}); 
@@ -491,13 +485,13 @@ $(document).ready(function(){
 	}); 
 });
 
-
 $('.f1_edit').on('click', function(event){
 	event.preventDefault();
 	$('#modal_title').html('<i class="fa fa-upload mr-2"></i> Upload Favicon')
 	$('#data_act').val('favicon')
 	$('#modal_fedit').modal('show')
 });
+
 $('.f2_edit').on('click', function(event){
 	event.preventDefault();
 	$('#modal_title').html('<i class="fa fa-upload mr-2"></i> Upload Logo')

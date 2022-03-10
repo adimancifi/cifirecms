@@ -5,7 +5,7 @@ class User extends Admin_controller {
 
 	public $mod = 'user';
 	public $dirout = 'mod/user/';
-	public $path_photo = FCPATH.'content/uploads/user/';
+	public $path_photo = CONTENTPATH.'uploads/user/';
 
 	public function __construct() 
 	{
@@ -19,365 +19,64 @@ class User extends Admin_controller {
 
 	public function index()
 	{
-		if ($this->read_access === TRUE)
+		if ( $this->read_access )
 		{
-			$this->vars['all_users'] = $this->user_model->all_user();
-			$this->render_view('view_index', $this->vars);
-		}
-		else
-		{
-			return $this->render_403();
-		}
-	}
-
-
-	public function data_table_user()
-	{
-		if (
-		    $this->input->is_ajax_request() == TRUE && 
-		    $this->read_access == TRUE
-		    )
-		{
-			$data_output = [];
-			$users = $this->user_model->get_datatables();
-
-			foreach ($users as $res) 
+			if ( $this->input->is_ajax_request() )
 			{
-				$row = [];
+				$data_output = [];
+				$users = $this->user_model->get_datatables();
 
-				$row[] = '<div class="text-center"><input type="checkbox" class="row_data" value="'. encrypt($res['user_id']) .'"></div>';
-
-				$row[] = '<div class="text-center"><a href="'.user_photo($res['user_photo']).'" class="fancybox"><img src="'.user_photo($res['user_photo']).'" style="background:#fff;padding:2px;width:40px;border-radius:50%;border:1px solid #ddd;"></a></div>';
-
-				$row[] = $res['user_username'];
-				$row[] = $res['user_name'];
-				$row[] = $res['level_title'];
-				// status
-				$row[] = ($res['user_active'] == 'Y' ? '<span class="badge badge-b badge-pill badge-primary">Active</span>' : '<span class="badge badge-b badge-pill badge-secondary">No</span>');
-
-				$row[] = '<div class="text-center"><div class="btn-group">
-				<a href="'. admin_url($this->mod.'/edit/'.$res['user_id']) .'" class="button btn-xs btn-default" data-toggle="tooltip" data-placement="top" data-title="'. lang_line('button_edit') .'"><i class="icon-pencil3"></i></a>
-				<button type="button" class="button btn-xs btn-default delete_single" data-toggle="tooltip" data-placement="top" data-title="'. lang_line('button_delete') .'" data-pk="'. encrypt($res['user_id']) .'"><i class="icon-bin"></i></button>
-				</div></div>';
-
-				$data_output[] = $row;
-			}
-
-			$json_output = array(
-							"draw" => $this->input->post('draw'),
-							"recordsTotal" => $this->user_model->count_all(),
-							"recordsFiltered" => $this->user_model->count_filtered(),
-							"data" => $data_output,
-							);
-
-			$this->json_output($json_output);
-		}
-		else 
-		{
-			show_404();
-		}
-	}
-
-
-	public function add_new()
-	{
-		if ($this->write_access == TRUE)
-		{				
-			if ($this->input->is_ajax_request() == TRUE)
-			{
-				$set_rules = [
-					[
-						'field' => 'level',
-						'label' => lang_line('form_label_level'),
-						'rules' => 'required|numeric|max_length[1]'
-					],
-					[
-						'field' => 'username',
-						'label' => lang_line('form_label_username'),
-						'rules' => 'required|trim|min_length[4]|max_length[20]|regex_match[/^[a-z0-9._]+$/]|callback__cek_addusername',
-					],
-					[
-						'field' => 'email',
-						'label' => lang_line('form_label_email'),
-						'rules' => 'required|trim|min_length[10]|max_length[60]|valid_email|callback__cek_addemail',
-					],
-					[
-						'field' => 'input_password',
-						'label' => lang_line('form_label_password'),
-						'rules' => 'required|min_length[6]',
-					],
-					[
-						'field' => 'name',
-						'label' => lang_line('form_label_fullname'),
-						'rules' => 'required|trim|min_length[4]|max_length[20]|alpha_numeric_spaces',
-					],
-					[
-						'field' => 'birthday',
-						'label' => lang_line('form_label_birthday'),
-						'rules' => 'required',
-					],
-				];	
-				
-				$this->form_validation->set_rules($set_rules);
-
-				if ($this->form_validation->run() == TRUE) 
+				foreach ($users as $res) 
 				{
-					$active = ( !empty($this->input->post('active')) ? 'Y' : 'N' );
-					$data = array(
-						'level'    => $this->input->post('level'),
-						'username' => $this->input->post('username'),
-						'email'    => $this->input->post('email'),
-						'password' => encrypt($this->input->post('input_password')),
-						'name'     => $this->input->post('name'),
-						'gender'   => $this->input->post('gender'),
-						'active'   => $active,
-						'photo'    => 'user-'.random_string('numeric', 20) .".jpg",
-					);
+					$row = [];
 
-					$this->user_model->insert_user($data);
-					$response['success'] = true;
-				}
-				else 
-				{
-					$response['success'] = false;
-					$response['alert']['type'] = 'error';
-					$response['alert']['content'] = validation_errors();
+					$row[] = '<div class="text-center"><input type="checkbox" class="row_data" value="'. encrypt($res['user_id']) .'"></div>';
+
+					$row[] = '<div class="text-center"><a href="'.user_photo($res['user_photo']).'" class="fancybox"><img src="'.user_photo($res['user_photo']).'" style="background:#fff;padding:2px;width:40px;border-radius:50%;border:1px solid #ddd;"></a></div>';
+
+					$row[] = $res['user_username'];
+					$row[] = $res['user_name'];
+					$row[] = $res['level_title'];
+					// status
+					$row[] = ($res['user_active'] == 'Y' ? '<span class="badge badge-b badge-pill badge-primary">Active</span>' : '<span class="badge badge-b badge-pill badge-secondary">No</span>');
+
+					$row[] = '<div class="text-center"><div class="btn-group">
+					<a href="'. admin_url($this->mod.'/edit/'.$res['user_id']) .'" class="button btn-xs btn-default" data-toggle="tooltip" data-placement="top" data-title="'. lang_line('button_edit') .'"><i class="icon-pencil3"></i></a>
+					<button type="button" class="button btn-xs btn-default delete_single" data-toggle="tooltip" data-placement="top" data-title="'. lang_line('button_delete') .'" data-pk="'. encrypt($res['user_id']) .'"><i class="icon-bin"></i></button>
+					</div></div>';
+
+					$data_output[] = $row;
 				}
 
-				$this->json_output($response);
+				$json_output = array(
+								"draw" => $this->input->post('draw'),
+								"recordsTotal" => $this->user_model->count_all(),
+								"recordsFiltered" => $this->user_model->count_filtered(),
+								"data" => $data_output,
+								);
+
+				$this->json_output($json_output);
 			}
-			$this->render_view('view_add_new', $this->vars);
-		}
-		else
-		{
-			return $this->render_403();
-		}
-	}
-
-
-	public function edit($id = 0)
-	{
-		$id = xss_filter($id,'sql');
-		if ( empty($id) || $id == 0)
-		{
-			return $this->render_404();
-		}
-		elseif ( $this->modify_access == TRUE )
-		{
-			$id_level = $this->user_model->get_level_by($id);
-			if ($id == 1 && login_level('admin',TRUE) != "super-admin")
-			{
-				return $this->render_404();
-			}
-
-			elseif (empty($id) || $this->user_model->cek_id($id) != 1 ) 
-			{
-				return $this->render_404();
-			}
-
-
-			elseif ($id != login_key('admin') && login_level('admin',TRUE) == "admin" && $id_level <= 2)
-			{
-				return $this->render_404();
-			}
-			else
-			{			
-				$this->vars['res_user'] = $this->user_model->get_user($id);
-				$this->vars['select_levels'] = $this->user_model->select_level();
-
-				$this->render_view('view_edit', $this->vars);
-			}
-		}
-		else
-		{
-			return $this->render_403();
-		}
-	}
-
-	function submit_update_user()
-	{
-		if ( 
-		    $this->input->is_ajax_request() == TRUE && 
-		    $this->modify_access == TRUE
-		    )
-		{
-			$pk = decrypt($this->input->post('pk'));
-			$id = xss_filter($pk, 'sql');
-
-			$this->form_validation->set_rules(array(array(
-				'field' => 'name',
-				'label' => lang_line('form_label_fullname'),
-				'rules' => 'required|trim|min_length[4]|max_length[20]|alpha_numeric_spaces',
-			)));
-
-			// $this->form_validation->set_rules(array(array(
-			// 	'field' => 'email',
-			// 	'label' => lang_line('form_label_email'),
-			// 	'rules' => 'required|trim|min_length[10]|max_length[60]|valid_email|callback__cek_editemail',
-			// )));
-
-			$this->form_validation->set_rules(array(array(
-				'field' => 'input_password',
-				'label' => lang_line('form_label_password'),
-				'rules' => 'min_length[6]',
-			)));
-			
-			$this->form_validation->set_rules(array(array(
-				'field' => 'birthday',
-				'label' => lang_line('form_label_birthday'),
-				'rules' => 'required',
-			)));
-			
-			$this->form_validation->set_rules(array(array(
-				'field' => 'birthday',
-				'label' => lang_line('form_label_birthday'),
-				'rules' => 'required',
-			)));
-
-			if (login_level('admin',TRUE) == "super-admin")
-			{
-				$this->form_validation->set_rules(array(array(
-					'field' => 'level',
-					'label' => lang_line('form_label_level'),
-					'rules' => 'required',
-				)));
-			}
-			elseif ($id == login_key('admin') && login_level('admin',TRUE) == "admin")
-			{
-				$this->form_validation->set_rules(array(array(
-					'field' => 'level',
-					'label' => lang_line('form_label_level'),
-					'rules' => 'required|numeric|max_length[1]|greater_than[1]',
-					'errors' => array(
-						'greater_than' => '{field} error'
-					)
-				)));
-			}
-			else
-			{
-				$this->form_validation->set_rules(array(array(
-					'field' => 'level',
-					'label' => lang_line('form_label_level'),
-					'rules' => 'required|numeric|max_length[1]|greater_than[2]',
-					'errors' => array(
-						'greater_than' => '{field} error'
-					)
-				)));
-			}
-
-			$this->form_validation->set_rules(array(array(
-				'field' => 'tlpn',
-				'label' => lang_line('form_label_tlpn'),
-				'rules' => 'max_length[20]|regex_match[/^[0-9-+ ]+$/]',
-			)));
-
-			if ($this->form_validation->run() == TRUE) 
-			{
-				$in_pass1 = $this->input->post('input_password');
-				$in_pass2 = $this->input->post('input_password2');
-				$password = empty($in_pass1) ? $in_pass2 : encrypt($in_pass1);
-				
-				$data = array(
-					'level'    => $this->input->post('level'),
-					'password' => $password,
-					// 'email'    => $this->input->post('email'),
-					'name'     => $this->input->post('name'),
-					'gender'   => $this->input->post('gender'),
-					'birthday' => date('Y-m-d',strtotime($this->input->post('birthday'))),
-					'about'    => !empty($this->input->post('about')) ? cut($this->input->post('about'), 600) : '',
-					'address'  => !empty($this->input->post('address')) ? cut($this->input->post('address'), 600) : '',
-					'tlpn'     => $this->input->post('tlpn'),
-					'active'   => ( !empty($this->input->post('active')) ? 'Y' : 'N' )
-				);
-
-				if ( empty($_FILES['fupload']['tmp_name']) )
-				{
-					$this->user_model->update($id, $data);
-
-					$response['success'] = true;
-					$response['alert']['type'] = 'success';
-					$response['alert']['content'] = lang_line('form_message_update_success');
-					$this->json_output($response);
-				}
-
-				else
-				{
-					$new_photo = $this->user_model->get_photo($id);
-
-					$this->load->library('upload', array(
-						'upload_path'   => $this->path_photo,
-						'allowed_types' => "jpg|png|jpeg",
-						'file_name'     => $new_photo,
-						'max_size'      => 1024 * 10,
-						'overwrite'     => TRUE
-					));
-
-					if ($this->upload->do_upload('fupload')) 
-					{
-						$this->user_model->update($id, $data);
-						$this->load->library('image_lib');
-						$imgConfig = [
-							// 'image_library'  => 'ImageMagick',
-							'source_image'   => $this->path_photo.$new_photo,
-							'maintain_ratio' => FALSE,
-							'width'          => 200,
-							'height'         => 200,
-							'quality'        => 100
-
-						];
-						$this->image_lib->initialize($imgConfig);
-						$this->image_lib->resize();
-						
-						$response['success'] = true;
-						$response['alert']['type'] = 'success';
-						$response['alert']['content'] = lang_line('form_message_update_success');
-						$this->json_output($response);
-					}
-					else
-					{
-						$error_content = $this->upload->display_errors();
-
-						$response['success'] = false;
-						$response['alert']['type'] = 'error';
-						$response['alert']['content'] = $error_content;
-						$this->json_output($response);
-					}
-				}
-			}
-
 			else 
 			{
-				$response['success'] = false;
-				$response['alert']['type'] = 'error';
-				$response['alert']['content'] = validation_errors();
-				$this->json_output($response);
+				$this->vars['all_users'] = $this->user_model->all_user();
+				$this->render_view('view_index', $this->vars);
 			}
 		}
 		else
 		{
-			show_404();
+			$this->render_403();
 		}
 	}
-
-
-	public function upload_photo()
-	{
-		if ($this->input->is_ajax_request() == TRUE && $this->write_access == TRUE )
-		{
-			$pk = $this->input->post('pk');
-			$photo_pk = $this->user_model->get_photo($pk);
-		}
-	}
-
 
 
 	public function delete()
 	{
-		if ($this->input->is_ajax_request() == TRUE && $this->delete_access == TRUE )
+		if ( $this->input->is_ajax_request() && $this->delete_access )
 		{
 			$act = $this->input->post('act');
 
-			if ($act == "level")
+			if ( $act == 'level' )
 			{
 				$id_del = xss_filter($this->input->post('id') ,'sql');
 				
@@ -419,6 +118,332 @@ class User extends Admin_controller {
 				$response['alert']['content'] = lang_line('form_message_delete_success');
 				$this->json_output($response);
 			}
+		}
+		else
+		{
+			show_404();
+		}
+	}
+
+
+	public function add_new()
+	{
+		if ( $this->write_access )
+		{				
+			if ( $this->input->is_ajax_request() )
+			{
+				$this->form_validation->set_rules(array(
+					array(
+						'field' => 'level',
+						'label' => lang_line('form_label_level'),
+						'rules' => 'required|numeric|max_length[1]'
+					),
+					array(
+						'field' => 'username',
+						'label' => lang_line('form_label_username'),
+						'rules' => 'required|trim|min_length[4]|max_length[20]|regex_match[/^[a-z0-9._]+$/]|callback__cek_addusername',
+					),
+					array(
+						'field' => 'email',
+						'label' => lang_line('form_label_email'),
+						'rules' => 'required|trim|min_length[10]|max_length[60]|valid_email|callback__cek_addemail',
+					),
+					array(
+						'field' => 'input_password',
+						'label' => lang_line('form_label_password'),
+						'rules' => 'required|min_length[6]',
+					),
+					array(
+						'field' => 'name',
+						'label' => lang_line('form_label_fullname'),
+						'rules' => 'required|trim|min_length[4]|max_length[20]|alpha_numeric_spaces',
+					),
+					array(
+						'field' => 'birthday',
+						'label' => lang_line('form_label_birthday'),
+						'rules' => 'required',
+					),
+					array(
+						'field' => 'tlpn',
+						'label' => lang_line('form_label_tlpn'),
+						'rules' => 'required|min_length[4]|max_length[20]',
+					),
+				));
+
+				if ( $this->form_validation->run() ) 
+				{
+					$active = ( !empty($this->input->post('active')) ? 'Y' : 'N' );
+					$data = array(
+						'level'    => xss_filter($this->input->post('level'), 'sql'),
+						'username' => xss_filter($this->input->post('username')),
+						'email'    => xss_filter($this->input->post('email')),
+						'password' => encrypt($this->input->post('input_password')),
+						'name'     => xss_filter($this->input->post('name'), 'xss'),
+						'gender'   => xss_filter($this->input->post('gender'), 'xss'),
+						'tlpn'     => xss_filter($this->input->post('tlpn'), 'xss'),
+						'active'   => $active,
+						'photo'    => 'user-'.random_string('numeric', 20) .".jpg",
+					);
+
+					$this->user_model->insert_user($data);
+					$response['success'] = true;
+				}
+				else 
+				{
+					$response['success'] = false;
+					$response['alert']['type'] = 'error';
+					$response['alert']['content'] = validation_errors();
+				}
+
+				$this->json_output($response);
+			}
+			else
+			{
+				$this->render_view('view_add_new', $this->vars);
+			}
+		}
+		else
+		{
+			$this->render_403();
+		}
+	}
+
+
+	public function edit($id = 0)
+	{
+		if ( $this->modify_access )
+		{
+			$id = xss_filter($id,'sql');
+			if ( empty($id) || $id == 0)
+			{
+				$this->render_404();
+			}
+			else
+			{
+				$id_level = $this->user_model->get_level_by($id);
+
+				if ( $id == 1 && login_level('admin', TRUE) != 'super-admin' )
+				{
+					$this->render_404();
+				}
+
+				elseif (empty($id) || $this->user_model->cek_id($id) != 1 ) 
+				{
+					$this->render_404();
+				}
+
+				elseif ( $id != login_key('admin') && login_level('admin',TRUE) == 'admin' && $id_level <= 2 )
+				{
+					$this->render_404();
+				}
+				else
+				{			
+					$this->vars['res_user'] = $this->user_model->get_user($id);
+					$this->vars['select_levels'] = $this->user_model->select_level();
+
+					$this->render_view('view_edit', $this->vars);
+				}
+			}
+		}
+		else
+		{
+			$this->render_403();
+		}
+	}
+
+
+	public function submit_update_user()
+	{
+		if ( $this->input->is_ajax_request() && $this->modify_access )
+		{
+			$pk = decrypt($this->input->post('pk'));
+			$id = xss_filter($pk, 'sql');
+
+			$this->form_validation->set_rules(array(array(
+				'field' => 'name',
+				'label' => lang_line('form_label_fullname'),
+				'rules' => 'required|trim|min_length[4]|max_length[20]|alpha_numeric_spaces',
+			)));
+
+			$this->form_validation->set_rules(array(array(
+				'field' => 'email',
+				'label' => lang_line('form_label_email'),
+				'rules' => 'required|trim|min_length[4]|max_length[80]|valid_email',
+			)));
+
+			$this->form_validation->set_rules(array(array(
+				'field' => 'input_password',
+				'label' => lang_line('form_label_password'),
+				'rules' => 'min_length[6]',
+			)));
+			
+			$this->form_validation->set_rules(array(array(
+				'field' => 'birthday',
+				'label' => lang_line('form_label_birthday'),
+				'rules' => 'required|trim',
+			)));
+			
+			$this->form_validation->set_rules(array(array(
+				'field' => 'birthday',
+				'label' => lang_line('form_label_birthday'),
+				'rules' => 'required',
+			)));
+
+			if ( login_level('admin',TRUE) == 'super-admin' )
+			{
+				$this->form_validation->set_rules(array(array(
+					'field' => 'level',
+					'label' => lang_line('form_label_level'),
+					'rules' => 'required',
+				)));
+			}
+			elseif ($id == login_key('admin') && login_level('admin',TRUE) == "admin")
+			{
+				$this->form_validation->set_rules(array(array(
+					'field' => 'level',
+					'label' => lang_line('form_label_level'),
+					'rules' => 'required|numeric|max_length[1]|greater_than[1]',
+					'errors' => array(
+						'greater_than' => '{field} error'
+					)
+				)));
+			}
+			else
+			{
+				$this->form_validation->set_rules(array(array(
+					'field' => 'level',
+					'label' => lang_line('form_label_level'),
+					'rules' => 'required|numeric|max_length[1]|greater_than[2]',
+					'errors' => array(
+						'greater_than' => '{field} error'
+					)
+				)));
+			}
+
+			$this->form_validation->set_rules(array(array(
+				'field' => 'tlpn',
+				'label' => lang_line('form_label_tlpn'),
+				'rules' => 'max_length[20]|regex_match[/^[0-9-+ ]+$/]',
+			)));
+
+			if ( $this->form_validation->run() ) 
+			{
+				$email = xss_filter($this->input->post('email', TRUE), 'xss');
+
+				$cek_email = $this->db
+					->select('email')
+					->where("BINARY email='$email'", NULL, FALSE)
+					->get('t_user');
+
+				$contMail = $cek_email->num_rows();
+				$currentMail = $cek_email->row_array()['email'];
+				
+				$editMail =  $this->db
+					->select('email')
+					->where('id',$id)
+					->get('t_user')
+					->row_array()['email'];
+
+				if ( 
+				      $contMail == 1 &&
+				      $currentMail == $editMail || 
+				      $contMail != 1
+				    )
+				{
+					$in_pass1 = $this->input->post('input_password');
+					$in_pass2 = $this->input->post('input_password2');
+					$password = empty($in_pass1) ? $in_pass2 : encrypt($in_pass1);
+					
+					$data = array(
+						'level'    => xss_filter($this->input->post('level'), 'sql'),
+						'password' => $password,
+						'email'    => $email,
+						'name'     => xss_filter($this->input->post('name'), 'xss'),
+						'gender'   => xss_filter($this->input->post('gender'), 'gender'),
+						'birthday' => date('Y-m-d',strtotime($this->input->post('birthday'))),
+						'about'    => ( !empty($this->input->post('about')) ? cut($this->input->post('about'), 600) : '' ),
+						'address'  => ( !empty($this->input->post('address')) ? cut($this->input->post('address'), 600) : '' ),
+						'tlpn'     => xss_filter($this->input->post('tlpn'), 'xss'),
+						'active'   => ( !empty($this->input->post('active')) ? 'Y' : 'N' )
+					);
+
+					if ( empty($_FILES['fupload']['tmp_name']) )
+					{
+						$this->user_model->update($id, $data);
+
+						$response['success'] = true;
+						$response['alert']['type'] = 'success';
+						$response['alert']['content'] = lang_line('form_message_update_success');
+						$this->json_output($response);
+					}
+
+					else
+					{
+						$new_photo = $this->user_model->get_photo($id);
+
+						$this->load->library('upload', array(
+							'upload_path'   => $this->path_photo,
+							'allowed_types' => "jpg|png|jpeg",
+							'file_name'     => $new_photo,
+							'max_size'      => 1024 * 10,
+							'overwrite'     => TRUE
+						));
+
+						if ($this->upload->do_upload('fupload')) 
+						{
+							$this->user_model->update($id, $data);
+
+							// crop image.
+							$this->load->library('simple_image');
+							$this->simple_image
+							     ->fromFile($this->path_photo.$new_photo)
+							     ->thumbnail(200, 200, 'center')
+							     ->toFile($this->path_photo.$new_photo);
+
+							$response['success'] = true;
+							$response['alert']['type'] = 'success';
+							$response['alert']['content'] = lang_line('form_message_update_success');
+							$this->json_output($response);
+						}
+						else
+						{
+							$response['success'] = false;
+							$response['alert']['type'] = 'error';
+							$response['alert']['content'] = $this->upload->display_errors();
+							$this->json_output($response);
+						}
+					}
+				}
+				else
+				{
+					$response['success'] = false;
+					$response['alert']['type'] = 'error';
+					$response['alert']['content'] = lang_line('mail_exist');
+					$this->json_output($response);
+				}
+			}
+
+			else 
+			{
+				$response['success'] = false;
+				$response['alert']['type'] = 'error';
+				$response['alert']['content'] = validation_errors();
+				$this->json_output($response);
+			}
+		}
+		else
+		{
+			show_404();
+		}
+	}
+
+
+	public function upload_photo()
+	{
+		if ( $this->input->is_ajax_request() && $this->write_access )
+		{
+			$pk = $this->input->post('pk');
+			$photo_pk = $this->user_model->get_photo($pk);
 		}
 		else
 		{
@@ -480,16 +505,13 @@ class User extends Admin_controller {
 	}
 
 
-
-
-
 	public function level()
 	{
-		if ($this->user_role->access(login_level('admin'), 'level', 'read_access') == TRUE)
+		if ( $this->user_role->access(login_level('admin'), 'level', 'read_access') == TRUE )
 		{
-			if ($this->input->is_ajax_request() == TRUE)
+			if ( $this->input->is_ajax_request() )
 			{
-				if ($this->_act == 'ajax_preview_level')
+				if ( $this->_act == 'ajax_preview_level' )
 				{
 					$title = $this->input->post('title');
 					$id_level = $this->input->post('id_level');
@@ -576,15 +598,16 @@ class User extends Admin_controller {
 
 		else
 		{
-			return $this->render_403();
+			$this->render_403();
 		}
 	}
 
+	
 	public function data_table_level()
 	{
 		if (
-		    $this->input->is_ajax_request() == TRUE && 
-		    $this->user_role->access(login_level('admin'), 'level', 'read_access') == TRUE
+		     $this->input->is_ajax_request() && 
+		     $this->user_role->access(login_level('admin'), 'level', 'read_access') == TRUE
 		    )
 		{		
 			$data = $this->user_model->get_datatables_level();
@@ -634,12 +657,13 @@ class User extends Admin_controller {
 		}
 	}
 
+	
 	public function delete_level()
 	{
 		if ( 
-		    $this->input->is_ajax_request() == TRUE && 
-		    login_level('admin') == 1 && 
-		    $this->user_role->access(login_level('admin'), 'level', 'delete_access') == TRUE
+		     $this->input->is_ajax_request() && 
+		     login_level('admin') == 1 && 
+		     $this->user_role->access(login_level('admin'), 'level', 'delete_access') == TRUE
 		    )
 		{
 			$data_pk = $this->input->post('data');
@@ -660,11 +684,8 @@ class User extends Admin_controller {
 	}
 
 
-
-	
 	public function role($param = '')
 	{
-
 		$level = xss_filter($param, 'sql');
 
 		if (
@@ -672,7 +693,7 @@ class User extends Admin_controller {
 		    $this->user_role->access(login_level('admin'), 'level', 'read_access') == TRUE 
 		    )
 		{
-			if ($this->input->is_ajax_request() == TRUE)
+			if ( $this->input->is_ajax_request() )
 			{
 				if ($this->_act == 'edit_module_role')
 				{
@@ -681,11 +702,12 @@ class User extends Admin_controller {
 					$this->load->view($this->dirout.'view_edit_module_role', $this->vars);
 				}
 			}
+			
 			else
 			{
-				if ($this->_act == 'add-module') 
+				if ( $this->_act == 'add-module' ) 
 				{
-					if ( ! empty($this->input->post('module')))
+					if ( ! empty($this->input->post('module')) )
 					{
 						$data_role = array(
 							'level' => $level,
@@ -699,7 +721,7 @@ class User extends Admin_controller {
 					}
 					else 
 					{
-						$this->alert->set($this->mod,'warning','No data');
+						$this->alert->set($this->mod, 'warning', 'No data');
 					}
 					redirect(uri_string());
 				}
@@ -714,13 +736,11 @@ class User extends Admin_controller {
 						'delete_access' => empty($this->input->post('delete')) ? "N": "Y"
 					);
 					$this->user_model->update_module($id_module, $data_role);
-					// $this->db->where('id',$id_module)->update('t_user_role', $data_role);
-
 					$this->alert->set($this->mod,'success', lang_line('mod_lang_2').' '.lang_line('form_message_update_success'));
 					redirect(uri_string());
 				}
 
-				elseif ($this->_act == 'modul-delete')
+				elseif ( $this->_act == 'modul-delete' )
 				{
 					$id_module = $this->input->post('id');
 					$this->user_model->delete_module($id_module);
@@ -738,16 +758,7 @@ class User extends Admin_controller {
 		
 		else
 		{
-			return $this->render_403();
+			$this->render_403();
 		}
-	}
-
-
-
-	public function profile()
-	{
-		$id_user = login_key('admin');
-		$this->vars['res_profil'] = $this->user_model->get_user($id_user);
-		$this->render_view('view_profil',$this->vars);
 	} 
 } // End Class.

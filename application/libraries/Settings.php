@@ -81,6 +81,10 @@ class Settings {
 			'smtp_port' => $this->website('port'),
 			'smtp_user' => $this->website('username'),
 			'smtp_pass' => decrypt($this->website('password')),
+			// 'smtp_crypto' => 'ssl',
+			// 'smtp_timeout' => 10,
+			// 'newline'   => "\r\n",
+			// 'crlf'      => "\r\n",
 			'mailtype'  => 'html',
 			'charset'   => 'iso-8859-1', // iso-8859-1 or utf-8
 			'wordwrap'  => TRUE

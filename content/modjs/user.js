@@ -23,8 +23,7 @@ var DataTableIndex = $('#DataTable').DataTable({
     ],
     'ajax': {
         'type': 'POST',
-        'url': admin_url + a_mod + '/data-table-user',
-        data: csrfData
+        'url': window.location.href
     },
     'drawCallback': function( settings ) {
         var api_table = this.api();
@@ -49,7 +48,6 @@ var DataTableIndex = $('#DataTable').DataTable({
         });
     }
 });
-
 
 $('#form_add_user').on('submit', function(e){
     //e.preventDefault();
@@ -76,12 +74,9 @@ $('#form_add_user').on('submit', function(e){
 
 $('#form_update_user').on('submit',function(e){
     e.preventDefault();
-
     $('.submit_update').find('i').removeClass().addClass('icon-spinner2 spinner mr-2');
     $('.noty_layout').remove();
-
     var formData = new FormData(this);
-
     var form = $('#form_update_user');
     $.ajax({
         url: admin_url + a_mod + '/submit-update-user',
@@ -99,12 +94,6 @@ $('#form_update_user').on('submit',function(e){
     })
     return false;
 });
-
-
-
-
-
-
 
 // data-table level
 var DataTableLevel = $("#DataTableLevel").DataTable({
@@ -156,13 +145,13 @@ var DataTableLevel = $("#DataTableLevel").DataTable({
 		$(".view_level").on('click', function(e){
             e.preventDefault();
 			$('#modal_preview_level').modal('show');
+            $('#data-detail').html('<p class="text-center">Please wait...</p>')
 		    var id_level=$(this).attr("id-level");
 		    var title_level=$(this).attr("title-level");
 		    $.ajax({
 		        type:'POST',
-		        // data:'id_level='+id_level+'&title='+title_level+'&act=ajax_preview_level&'+csrfName+'='+csrfToken,
-                dataType:'html',
-                data:{
+                dataType: 'html',
+                data: {
                     act: 'ajax_preview_level',
                     id_level: id_level,
                     title: title_level,
@@ -176,8 +165,6 @@ var DataTableLevel = $("#DataTableLevel").DataTable({
 		});
 	},
 });
-
-
 
 $(".add_level").click(function() {
 	$('#modal_add_level').modal('show');
@@ -227,13 +214,6 @@ $(".moda_delete_module").click(function() {
     $('#modal_delete_level').modal('show');
 });
 
-
-
-
-
-
-
-
 $(".close-preview2").click(function(){
 	$(this).hide();
 	var resimg = $('#resset-image').val();
@@ -250,9 +230,6 @@ $(".close-preview").click(function(){
     $('#upload-image').val('');
 });
 
-
-
-
 $('#input-datepicker').datetimepicker({
     format: 'YYYY-MM-DD',
     showTodayButton: true,
@@ -265,12 +242,6 @@ $('#input-datepicker').datetimepicker({
     },
 });
 
-
-
-
- $('.form-check-input-styled').uniform();
-
-
 $('input:not(textarea)').keydown(function(event){
     var a = event.witch || event.keyCode;
     if(a == 13){
@@ -279,12 +250,10 @@ $('input:not(textarea)').keydown(function(event){
     }
 });
 
-
 function readImgURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function (e) {
-            // Show image.
             $('#image-preview').attr('src', e.target.result);
             $(".close-preview").show();
             $(".close-preview2").show();
@@ -292,6 +261,7 @@ function readImgURL(input) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
 $("#upload-image").change(function(){
     readImgURL(this);
 });
