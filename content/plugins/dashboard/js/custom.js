@@ -1,8 +1,6 @@
-
 var _jsDsCustoms = function () {
 	// Sidebar navigation
 	var _navigationSidebar = function() {
-
 		// Define default class names and options
 		var navClass = 'nav-sidebar',
 			navItemClass = 'nav-item',
@@ -13,7 +11,6 @@ var _jsDsCustoms = function () {
 			activeMod = admin_url + a_mod,
 			activeAct = admin_url + a_mod + a_act,
 			activePage = window.location.href;
-
 		// Configure collapsible functionality
 		$('.' + navClass).each(function() {
 			$(this).find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > ' + '.' + navLinkClass).not('.disabled').on('click', function (e) {
@@ -46,22 +43,12 @@ var _jsDsCustoms = function () {
 		// Scrollspy navigation
 		$('.nav-scrollspy').find('.' + navItemClass).has('.' + navSubmenuClass).children('.' + navItemClass + ' > ' + '.' + navLinkClass).off('click');
 
-
-
-
-		// var activeMod = admin_url + a_mod;
-		// var activeAct = admin_url + a_mod + a_act;
-		// var activePage = window.location.href;
-
 		$('ul#main_menu > li a').not('ul li ul a').each(function(){
 			var currentPage = $(this).attr('href');
-
 			if (activeMod === currentPage) {
 				$(this).parent().addClass('nav-item-open');
 				$('.li-'+a_mod).css('display','block');
-				// $('.li-'+a_mod+' li a').addClass('active');
 			} 
-
 		});
 
 		$('ul#main_menu li a').each(function(){
@@ -86,13 +73,11 @@ var _jsDsCustoms = function () {
 			console.warn('Warning - sticky.min.js is not loaded.');
 			return;
 		}
-
 		// Initialize
 		$('#sticky').stick_in_parent({
 			offset_top: 49,
 			parent: '.box-content'
 		});
-
 		// Detach on mobiles
 		$('.sidebar-mobile-component-toggle').on('click', function() {
 			$('#sticky').trigger("sticky_kit:detach");
@@ -147,7 +132,6 @@ var _jsDsCustoms = function () {
 		$('.fancybox').fancybox();
 	}
 
-	// Return objects assigned to module
 	return {
 		initComponents: function() {
 			_navigationSidebar();
@@ -164,8 +148,6 @@ var _jsDsCustoms = function () {
 document.addEventListener('DOMContentLoaded', function() {
 	_jsDsCustoms.initComponents();
 });
-
-// Js Notification
 
 function cfNotif(data){
 	Noty.overrideDefaults({
@@ -189,7 +171,6 @@ function cfAlert(data){
 	});
 }
 
-
 function dataTableDrawCallback() {
 	$('.dataTables_length select').select2({
 		minimumResultsForSearch: Infinity,
@@ -210,9 +191,6 @@ function dataTableDrawCallback() {
 	});
 }
 
-/**
- * Code From Tomi Candra https://web.facebook.com/kingtomay
- */
 function getLangJSON(){
 	var result = $.ajax({
 		dataType: 'json',
@@ -220,7 +198,6 @@ function getLangJSON(){
 	});
 	return result;
 }
-
 
 function cfSwalDelete(pk,api_table,uri){
 	var dataPk = pk;
@@ -247,7 +224,6 @@ function cfSwalDelete(pk,api_table,uri){
 			showLoaderOnConfirm: true,
 			preConfirm: function() {
 				return new Promise(function(resolve, reject) {
-					// $('[data-toggle="tooltip"]').tooltip('disable')
 					$.ajax({
 						type: 'POST',
 						url: dataUrl,
@@ -257,15 +233,8 @@ function cfSwalDelete(pk,api_table,uri){
 						success:function(response) {
 							if (response['success']==true) {
 								dataTable.row($('#DataTable tr.active')).remove().draw(false);
-								// cfNotif(response['alert']); // show notif
-								// $('html, body').animate({scrollTop:0});
 								resolve();
-								
 							} else {
-								// cfNotif({
-								// 	'type':'error',
-								// 	'content':'<i class="fa fa-exclamation-circle mr-2"></i> Error'
-								// });
 								Swal.fire({
 									position: 'top',
 									type: 'error',
@@ -274,19 +243,12 @@ function cfSwalDelete(pk,api_table,uri){
 									timer: 2500
 								})
 							};
-							// $('.swl_btn_del').find('i').removeClass('icon-spinner2 spinner').addClass('icon-bin');
-							
-							// setTimeout(function() {
-							// 	resolve();
-							// }, 1000000);
 						}
 					});
 				});
 			},
 		}).then( (result) => {
-			
 			if (result.value) {
-				// $('.swl_btn_del').find('i').removeClass('icon-bin').addClass('icon-spinner2 spinner');
 				Swal.fire({
 					position: 'top',
 					type: 'success',
@@ -295,17 +257,100 @@ function cfSwalDelete(pk,api_table,uri){
 					timer: 2500
 				})
 			}
-			else{
-				// $('[data-toggle="tooltip"]').tooltip('enable')
-			}
+			else{}
 		})
 	});
 }
 
+function cfCompogen(){
+	getLangJSON().done(function(lang){
+		$('.steps-validation').steps({
+		    headerTag: 'h6',
+		    bodyTag: 'fieldset',
+		    titleTemplate: '<span class="number">#index#</span> #title#',
+		    labels: {
+		        previous: '<i class="icon-arrow-left13 mr-2" /> Previous',
+		        next: 'Next <i class="icon-arrow-right14 ml-2" />',
+		        finish: 'Generate now <i class="icon-arrow-right14 ml-2" />'
+		    },
+		    transitionEffect: 'none',
+		    autoFocus: true,
+		    onStepChanging: function (event, currentIndex, newIndex) {
+		        var formCoGen = $(this).show();
+		        if (currentIndex > newIndex) {
+		            return true;
+		        }
+		        if (currentIndex < newIndex) {
+		            formCoGen.find('.body:eq(' + newIndex + ') label.error').remove();
+		            formCoGen.find('.body:eq(' + newIndex + ') .error').removeClass('error');
+		        }
+		        formCoGen.validate().settings.ignore = ':disabled,:hidden';
+		        return formCoGen.valid();
+		    },
+		    onFinishing: function (event, currentIndex) {
+		        form.validate().settings.ignore = ':disabled';
+		        return form.valid();
+		    },
+		    onFinished: function (event, currentIndex) {
+		        event.preventDefault();
+		        var formCoGen = $(this);
+		        var form_data = formCoGen.serialize();
+		        $.ajax({
+		            url: admin_url + a_mod +'/submit',
+		            type: 'POST',
+		            data: form_data,
+		            dataType: 'json',
+		            cache: false,
+		            success:function(response) {
+		                if (response['success']==true) {
+		                    window.location.href=admin_url+a_mod+'/finish/'+response['class'];
+		                } else{
+		                    alert('ERROR')
+		                };
+		            }
+		        });
+		    }
+		});
+
+		$('.steps-validation').validate({
+		    ignore: 'input[type=hidden], .select2-search__field', // ignore hidden fields
+		    errorClass: 'validation-invalid-label',
+		    highlight: function(element, errorClass) {
+		        $(element).removeClass(errorClass);
+		    },
+		    unhighlight: function(element, errorClass) {
+		        $(element).removeClass(errorClass);
+		    },
+		    errorPlacement: function(error, element) {
+		        // Unstyled checkboxes, radios
+		        if (element.parents().hasClass('form-check')) {
+		            error.appendTo( element.parents('.form-check').parent() );
+		        }
+		        // Input with icons and Select2
+		        else if (element.parents().hasClass('form-group-feedback') || element.hasClass('select2-hidden-accessible')) {
+		            error.appendTo( element.parent() );
+		        }
+		        // Input group, styled file input
+		        else if (element.parent().is('.uniform-uploader, .uniform-select') || element.parents().hasClass('input-group')) {
+		            error.appendTo( element.parent().parent() );
+		        }
+		        // Other elements
+		        else {
+		            error.insertAfter(element);
+		        }
+		    },
+		    rules: {
+		        email: {
+		            email: true
+		        }
+		    }
+		});
+	});
+}
 
 
 function cfTnyMCE(element){
-	var selector = element;
+	var selectorTnyMCE = element;
 	$('#tiny-text').click(function (e) {
 		e.stopPropagation();
 		tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'Content');
@@ -315,35 +360,30 @@ function cfTnyMCE(element){
 		tinymce.EditorManager.execCommand('mceAddEditor', true, 'Content');
 	});
 	tinymce.init({
-		selector: element,
+		selector: selectorTnyMCE,
 		editor_deselector: 'mceNoEditor',
-		skin: 'oxide',
-		// language: 'id',
-		// language_url: site_url+'content/vendor/tinymce5/langs/id.js',
-		branding: false,
-		statusbar: false,
-		a_plugin_option: true,
-		a_configuration_option: 400,
-		mobile: {
-			theme: 'silver',
- },
+		skin: 'lightgray',
 		plugins: [
-			// pagebreak searchreplace
-			'hr advlist autolink link image lists charmap preview anchor visualblocks visualchars media table directionality paste fullscreen code codesample autoresize responsivefilemanager'
+			"advlist autolink link image lists charmap print preview hr anchor pagebreak",
+			"searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
+			"table contextmenu directionality emoticons paste textcolor",
+			"code fullscreen youtube autoresize codemirror codesample responsivefilemanager"
 		],
-		// undo redo | 
-		toolbar:'undo redo | styleselect fontsizeselect bold italic underline strikethrough forecolor superscript subscript blockquote removeformat | alignleft aligncenter alignright alignjustify bullist numlist outdent indent table | hr charmap link unlink responsivefilemanager image media | codesample code visualblocks preview fullscreen',
+		toolbar1:'undo redo | bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent table',
+		toolbar2:'removeformat styleselect | fontsizeselect | hr charmap link unlink responsivefilemanager image media youtube codesample code | visualblocks preview fullscreen',
 		menubar: false,
-		visualblocks_default_state: true,
+		branding: false,
+		visualblocks_default_state: false,
+		relative_urls: false,
+		remove_script_host: false,
 		image_caption: true,
 		image_advtab: true,
 		fontsize_formats: '8px 10px 12px 14px 18px 24px 36px',
-		// resize: true,
-		autoresize_on_init: true,
-		autoresize_bottom_margin:0,
-		min_height: 450,
-		relative_urls: false,
-		remove_script_host: true,
+		resize: true,
+		autoresize_min_height: 420,
+    	autoresize_top_margin:5,
+    	autoresize_bottom_margin:4,
+		content_css: content_url+'plugins/member/css/bootstrap.min.css,'+content_url+'plugins/font-awesome/css/font-awesome.min.css',
 		codemirror: {
 			indentOnInit: true,
 			path: site_url+'content/plugins/codemirror'
@@ -352,7 +392,7 @@ function cfTnyMCE(element){
 		filemanager_access_key: ses_key,
 		external_filemanager_path: content_url+'plugins/filemanager/',
 		external_plugins: {
-			"responsivefilemanager": content_url + "plugins/tinymce5/plugins/responsivefilemanager/plugin.min.js",
+			"responsivefilemanager": content_url + "plugins/tinymce/plugins/responsivefilemanager/plugin.min.js",
 			'filemanager': content_url+'plugins/filemanager/plugin.min.js'
 		}
 	});
@@ -370,7 +410,7 @@ function setLang(lang){
 		},
 		cache:false,
 		success:function(response){
-			if (response['status']==true) {
+			if (response['status']==true){
 				window.location.reload();
 			}
 		}
@@ -378,8 +418,7 @@ function setLang(lang){
 }
 
 
-function responsive_filemanager_callback() {
-	//var url = $('#' + field_id).val();
+function responsive_filemanager_callback(){
 	var pict = $('#picture').val();
 	var url = site_url + 'content/uploads/' + pict;
 	$('#imgprv').attr('src', url).show();
@@ -387,7 +426,8 @@ function responsive_filemanager_callback() {
 	console.log();
 }
 
-function str_seotitle(str) {
+
+function str_seotitle(str){
 	var seotitle;
 	str = str.replace(/^\s+|\s+$/g, ''); // trim
 	str = str.toLowerCase();
@@ -412,3 +452,5 @@ function str_seotitle(str) {
  * `<img src="blank.gif" data-src="my_image.png" width="600" height="400" class="lazy">`
  */
 $(function(){function e(r,s){var t=new Image,u=r.getAttribute('data-src');t.onload=function(){!r.parent?r.src=u:r.parent.replaceChild(t,r),s?s():null},t.src=u}function g(r){var s=r.getBoundingClientRect();return 0<=s.top&&0<=s.left&&s.top<=(window.innerHeight||document.documentElement.clientHeight)}for(var h=function(r,s){if(document.querySelectorAll)s=document.querySelectorAll(r);else{var t=document,u=t.styleSheets[0]||t.createStyleSheet();u.addRule(r,'f:b');for(var v=t.all,w=0,x=[],y=v.length;w<y;w++)v[w].currentStyle.f&&x.push(v[w]);u.removeRule(0),s=x}return s},j=function(r,s){window.addEventListener?this.addEventListener(r,s,!1):window.attachEvent?this.attachEvent('on'+r,s):this['on'+r]=s},m=[],n=h('img.lazy'),o=function(){for(var r=0;r<m.length;r++)g(m[r])&&e(m[r],function(){m.splice(r,r)})},p=0;p<n.length;p++)m.push(n[p]);o(),j('scroll',o)});
+
+$('.form-check-input-styled').uniform();

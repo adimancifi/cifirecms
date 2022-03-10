@@ -7,42 +7,25 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title><?=$this->CI->meta_title;?></title>
 	<!-- favicon -->
-	<link rel="shortcut icon" href="<?=favicon()?>" >
+	<link rel="shortcut icon" href="<?=favicon()?>">
 
-	<!-- font-awesome -->
 	<link rel="stylesheet" href="<?=content_url('plugins/font-awesome/font-awesome.min.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/icomoon/styles.css')?>" type="text/css">
-	<!-- 
-	<link rel="stylesheet" href="<?=content_url('plugins/icons/material/icons.css')?>" type="text/css">
-	 -->
-
-	<!-- dashboard/css -->
-	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/bootstrap_limitless.css')?>"  type="text/css">
+	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/bootstrap_limitless.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/bootstrap.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/layout.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/components.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/dashboard/css/colors.css')?>" type="text/css">
-
-	<!-- x-editable -->
 	<link rel="stylesheet" href="<?=content_url('plugins/x-editable/x-editable.css');?>" type="text/css">
-	<!-- uniform -->
 	<link rel="stylesheet" href="<?=content_url('plugins/uniform/uniform.css')?>" type="text/css">
-	<!-- tagsinput/typeahead -->
 	<link rel="stylesheet" href="<?=content_url('plugins/tagsinput/typeahead.css')?>" type="text/css">
-	<!-- select2 -->
 	<link rel="stylesheet" href="<?=content_url('plugins/select2/select2.css')?>" type="text/css">
-	<!-- uploaders/fileinput -->
 	<link rel="stylesheet" href="<?=content_url('plugins/uploaders/fileinput.css')?>" type="text/css">
-	<!-- notifications/noty -->
-	<link rel="stylesheet" href="<?=content_url('plugins/notifications/noty.css')?>" type="text/css">
-	<!-- jqueri-ui-interactions -->
 	<link rel="stylesheet" href="<?=content_url('plugins/jqueri-ui-interactions/interactions.css')?>" type="text/css">
-	<!-- sweetalert2 css -->
-	<link rel="stylesheet" href="<?=content_url('plugins/sweetalert2/sweetalert2.css')?>">
-	<!-- datetimepicker -->
+	<link rel="stylesheet" href="<?=content_url('plugins/notifications/noty.css')?>" type="text/css">
+	<link rel="stylesheet" href="<?=content_url('plugins/sweetalert2/sweetalert2.css')?>" type="text/css">
 	<link rel="stylesheet" href="<?=content_url('plugins/datetime/bootstrap-datetimepicker.min.css');?>" type="text/css">
-	<!-- fancybox-2.1.7 -->
-	<link rel="stylesheet" href="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox.css');?>" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox.css');?>" type="text/css" media="screen">
 
 	<?php if ($this->mod === 'setting' || $this->mod == 'theme'): ?>
 	<!-- codemirror -->
@@ -59,12 +42,6 @@
 	<link rel="stylesheet" href="<?=content_url('plugins/menumanager/menu.css');?>" type="text/css">
 	<?php endif ?>
 
-
-	<!-- jquery -->
-	<script type="text/javascript" src="<?=content_url('plugins/jquery/jquery-2.2.4.min.js')?>"></script>
-	<!-- bootstrap.bundle -->
-	<script type="text/javascript" src="<?=content_url('plugins/dashboard/js/bootstrap.bundle.min.js')?>"></script>
-
 	<script type="text/javascript">
 		<?php 
 			$a_login_key = login_key('admin');
@@ -74,9 +51,8 @@
 			$a_fcontent  = CONTENTPATH;
 			$a_mod = $this->mod;
 			$a_act = (!empty($this->uri->segment(3)) ? "/".$this->uri->segment(3) : "");
-			$a_lang_active = seotitle($this->settings->website('language'));
-			$a_datatable_lang = content_url('plugins/datatable/lang/'.$a_lang_active.'.json');
-			$a_system_lang = content_url('plugins/json/lang/'.$a_lang_active.'.json');
+			$a_datatable_lang = content_url('plugins/datatable/lang/'.$this->_language.'.json');
+			$a_system_lang = content_url('plugins/json/lang/'.$this->_language.'.json');
 		?>
 		var ses_key   = "<?=$a_login_key;?>";
 		var site_url  = "<?=$a_site_url;?>";
@@ -85,26 +61,22 @@
 		var a_mod = "<?=$a_mod;?>";
 		var a_act = "<?=$a_act;?>";
 		var datatable_lang = "<?=$a_datatable_lang;?>";
-		var lang_active = "<?=$a_lang_active;?>";
+		var lang_active = "<?=$this->_language;?>";
 		
 	    var csrfName = '<?=$this->CI->security->get_csrf_token_name();?>';
 	    var csrfToken = '<?=$this->CI->security->get_csrf_hash();?>';
 	    var csrfData = {};
 	    csrfData['<?=$this->CI->security->get_csrf_token_name();?>'] = '<?=$this->CI->security->get_csrf_hash();?>';
 	</script>
-	
-	<!-- Add mousewheel plugin (this is optional) -->
-	<script type="text/javascript" src="<?=content_url('plugins/fancybox-2.1.7/jquery.mousewheel.pack.js');?>"></script>
-	<!-- Add fancyBox main JS and CSS files -->
-	<script type="text/javascript" src="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox.pack.js');?>"></script>
-	<!-- Add Media helper (this is optional) -->
-	<script type="text/javascript" src="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox-media.js');?>"></script>
+
+	<!-- jquery -->
+	<script type="text/javascript" src="<?=content_url('plugins/jquery/jquery-2.2.4.min.js')?>"></script>
 </head>
 <body class="navbar-top">
 	<!-- Main navbar -->
 	<div class="navbar navbar-expand-md navbar-dark fixed-top">
 		<div class="navbar-brand">
-			<a href="<?=admin_url('home')?>" class="d-inline-block adm-title"><!-- <i class="icon-grid6 mr-2"></i>  -->administrator</a>
+			<a href="<?=admin_url('home')?>" class="d-inline-block adm-title">administrator</a>
 		</div>
 		<div class="d-md-none">
 			<!-- to frondend mobile link -->
@@ -121,9 +93,7 @@
 					<a href="#" class="navbar-nav-link sidebar-control sidebar-main-toggle d-none d-md-block"><i class="icon-paragraph-justify3"></i></a>
 				</li>
 			</ul>
-			<span class="navbar-text ml-md-3 mr-md-auto">
-				<!-- <span class="badge bg-success">Online</span> -->
-			</span>
+			<span class="navbar-text ml-md-3 mr-md-auto"></span>
 			<!-- top nav -->
 			<ul class="navbar-nav">
 				<!-- language -->
@@ -132,7 +102,6 @@
 						<img src="<?=content_url('images/flag/'.$this->_language.'.png');?>" class="" alt="Language">
 						<span><?=humanize($this->_language)?></span>
 					</a>
-
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="javascript:void(0)" class="dropdown-item" onclick="setLang('english')">English</a>
 						<a href="javascript:void(0)" class="dropdown-item" onclick="setLang('indonesia')">Indonesia</a>
@@ -146,9 +115,9 @@
 						<img src="<?=user_photo(data_login('admin','photo'));?>" class="rounded-circle" alt="Avatar">
 						<span class="text-strong"><?=data_login('admin', 'name');?></span>
 					</a>
-
 					<div class="dropdown-menu dropdown-menu-right">
 						<a href="<?=site_url();?>" target="_blank" class="dropdown-item"><i class="icon-display"></i> <?=lang_line('menu_tofront');?></a>
+						<a href="<?=admin_url('profile');?>" class="dropdown-item"><i class="icon-user"></i> Profile</a>
 						<a href="<?=admin_url('mail');?>" class="dropdown-item"><i class="icon-envelop2"></i> <?=lang_line('menu_mail');?></a></a>
 						<a href="<?=admin_url('setting'); ?>" class="dropdown-item"><i class="fa fa-cog"></i> <?=lang_line('menu_setting');?></a>
 						<a href="<?=admin_url('logout'); ?>" class="dropdown-item"><i class="icon-switch"></i> <?=lang_line('menu_logout');?></a>
@@ -162,10 +131,8 @@
 
 	<!-- Page content -->
 	<div class="page-content">
-
 		<!-- Main sidebar -->
 		<div  class="sidebar sidebar-dark sidebar-lightX sidebar-main sidebar-expand-md">
-
 			<!-- Sidebar mobile toggler -->
 			<div class="sidebar-mobile-toggler text-center">
 				<a href="#" class="sidebar-mobile-main-toggle"><i class="icon-arrow-left8"></i></a>
@@ -208,13 +175,15 @@
 
 	<!-- Go to Top -->
 	<div class="sgo-top"></div>
-	
+
+	<!-- bootstrap.bundle -->
+	<script src="<?=content_url('plugins/dashboard/js/bootstrap.bundle.min.js')?>"></script>
 	<!-- jqueri-ui-interactions -->
-	<script type="text/javascript" src="<?=content_url('plugins/jqueri-ui-interactions/interactions.min.js')?>"></script>
+	<script src="<?=content_url('plugins/jqueri-ui-interactions/interactions.min.js')?>"></script>
 	<!-- sticky -->
-	<script type="text/javascript" src="<?=content_url('plugins/sticky/sticky.min.js')?>"></script>
+	<script src="<?=content_url('plugins/sticky/sticky.min.js')?>"></script>
 	<!-- notifications -->
-	<script type="text/javascript" src="<?=content_url('plugins/notifications/noty.min.js')?>"></script>
+	<script src="<?=content_url('plugins/notifications/noty.min.js')?>"></script>
 	<!-- sweetalert2 -->
 	<script src="<?=content_url('plugins/sweetalert2/sweetalert2.min.js')?>"></script>
 	<!-- uniform -->
@@ -231,12 +200,19 @@
 	<script src="<?=content_url('plugins/tagsinput/typeahead.bundle.min.js');?>"></script>
 	<!-- datetimepicker -->
 	<script src="<?=content_url('plugins/datetime/moment.js');?>"></script>
-	<script src="<?=content_url('plugins/datetime/bootstrap-datetimepicker.min.js');?>"></script>
+	<script src="<?=content_url('plugins/datetime/bootstrap-datetimepicker.js');?>"></script>
 	<!-- maskedinput -->
 	<script src="<?=content_url('plugins/maskedinput/jquery.maskedinput.min.js');?>"></script>
 	<!-- x-editable -->
 	<script src="<?=content_url('plugins/x-editable/x-editable.js');?>"></script>
-	
+	<!-- jquery validator -->
+	<script src="<?=content_url('plugins/jquery-validator/jquery-validator.min.js');?>"></script>
+	<!-- Add mousewheel plugin (this is optional) -->
+	<script src="<?=content_url('plugins/fancybox-2.1.7/jquery.mousewheel.pack.js');?>"></script>
+	<!-- Add fancyBox main JS and CSS files -->
+	<script src="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox.pack.js');?>"></script>
+	<!-- Add Media helper (this is optional) -->
+	<script src="<?=content_url('plugins/fancybox-2.1.7/jquery.fancybox-media.js');?>"></script>
 	<?php if ($this->mod != 'post'): ?>
 	<!-- fileinput -->
 	<script src="<?=content_url('plugins/uploaders/fileinput.min.js');?>"></script>
@@ -244,8 +220,8 @@
 	<script src="<?=content_url('plugins/uploaders/sortable.min.js');?>"></script>
 	<?php endif ?>
 
-	<!-- tinymce5 -->
-	<script src="<?=content_url('plugins/tinymce5/tinymce.min.js');?>"></script>
+	<!-- tinymce -->
+	<script src="<?=content_url('plugins/tinymce/tinymce.min.js');?>"></script>
 
 	<?php if ( $this->mod == 'theme' || $this->mod == 'setting'): ?>
 	<!-- codemirror -->
@@ -284,6 +260,10 @@
 	<!-- chart -->
 	<?php if ($this->mod == "home"): ?>
 	<script src="<?=content_url('plugins/chartjs/chart.min.js');?>"></script>
+	<?php endif ?>
+	
+	<?php if ($this->mod == "compogen"): ?>
+	<script src="<?=content_url('plugins/wizards/steps.min.js');?>"></script>
 	<?php endif ?>
 
 	<!-- dashboard app -->

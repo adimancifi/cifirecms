@@ -1,5 +1,4 @@
-
-var sFileUpload = function() {
+var themeFileUpload = function() {
     // Bootstrap file upload
     var _FileUpload = function() {
         if (!$().fileinput) {
@@ -22,7 +21,6 @@ var sFileUpload = function() {
             '</div>\n';
 
         $('.file-input').fileinput({
-            
             removeIcon: '<i class="fa fa-times mr-1"></i>',
             uploadIcon: '<i class="fa fa-upload mr-1"></i>',
             browseIcon: '<i class="fa fa-folder-open mr-1"></i>',
@@ -71,180 +69,168 @@ var sFileUpload = function() {
     }
 }();
 document.addEventListener('DOMContentLoaded', function() {
-    sFileUpload.init();
+    themeFileUpload.init();
 });
 
-
-
-
-
-
-$(".upload_theme_asets").click(function() {
+$(".upload_theme_asets").on('click',function(e) {
+    e.preventDefault();
     $('#modal_upload_theme_assets').modal('show');
 }); 
 
-
-$(document).ready(function(){
-    $(':file').change(function() {
-        var f = $(this)[0].files[0];
-        if (f.type == 'application/x-zip-compressed') {
-            $('.filez').val(f.name);
-        } else {
-            $(this).val('');
-            $('.filez').val('');
-            alert('error');
-        };
-  });
+$(':file').change(function() {
+    var f = $(this)[0].files[0];
+    if (f.type == 'application/x-zip-compressed') {
+        $('.filez').val(f.name);
+    } else {
+        $(this).val('');
+        $('.filez').val('');
+        alert('error');
+    };
 });
 
+$('#title').on('input', function() {
+    var a;
+    a = $.trim($(this).val());
+    a = a.replace(/\s+/g, ' ');
+    a = a.replace(/_/g, ' ');
+    $('#folder').val(a.toLowerCase());
+    $('#folder').val($('#folder').val().replace(/\W/g, ' '));
+    $('#folder').val($.trim($('#folder').val()));
+    $('#folder').val($('#folder').val().replace(/\s+/g, '-'));
+});
 
-$(document).ready(function(){
-    $('#title').on('input', function() {
-        var a;
-        a = $.trim($(this).val());
-        a = a.replace(/\s+/g, ' ');
-        a = a.replace(/_/g, ' ');
-        $('#folder').val(a.toLowerCase());
-        $('#folder').val($('#folder').val().replace(/\W/g, ' '));
-        $('#folder').val($.trim($('#folder').val()));
-        $('#folder').val($('#folder').val().replace(/\s+/g, '-'));
-    });
+$('#folder').on('input', function() {
+    var a;
+    a = $.trim($(this).val());
+    a = a.replace(/\s+/g, ' ');
+    a = a.replace(/_/g, ' ');
+    $('#folder').val(a.toLowerCase());
+    $('#folder').val($('#folder').val().replace(/\W/g, ' '));
+    $('#folder').val($.trim($('#folder').val()));
+    $('#folder').val($('#folder').val().replace(/\s+/g, '-'));
+});
 
-    $('#folder').on('input', function() {
-        var a;
-        a = $.trim($(this).val());
-        a = a.replace(/\s+/g, ' ');
-        a = a.replace(/_/g, ' ');
-        $('#folder').val(a.toLowerCase());
-        $('#folder').val($('#folder').val().replace(/\W/g, ' '));
-        $('#folder').val($.trim($('#folder').val()));
-        $('#folder').val($('#folder').val().replace(/\s+/g, '-'));
-    });
+$(".modal-helper").on('click',function(e) {
+    e.preventDefault();
+    $('#modal-helper').modal('show');
+});
 
-    $(".modal-helper").click(function() {
-        $('#modal-helper').modal('show');
-    });
+$(".c_blank_theme").on('click',function(e) {
+    e.preventDefault();
+    $('#modal_create_blank').modal('show');
+});
 
-    $(".c_blank_theme").click(function() {
-        $('#modal_create_blank').modal('show');
-    });
+$('.delete_theme').on('click',function(e) {
+    e.preventDefault();
+    var idTeme = $(this).attr("data-id");
+    var folderTheme = $(this).attr("data-folder");
+    var data = {
+        id:idTeme,
+        folder:folderTheme
+    };
+    var url = admin_url + a_mod + '/delete-theme';
+    themeDelete(data, url)
+});
 
-    $(".modal_delete").click(function() {
-        var idDel = $(this).attr("idDel");
-        $('#idDel').val(idDel);
-        $('#modal_delete').modal('show');
-    });
-
-    $(".modal_delete_theme").click(function() {
-        var idDel = $(this).attr("idDel");
-        var dirDel = $(this).attr("dirDel");
-        $('#idDel').val(idDel);
-        $('#dirDel').val(dirDel);
-        $('#modal_delete_theme').modal('show');
-    });
-
-
-
-    $('.delete_theme').on('click',function(event) {
-        event.preventDefault();
-        var idTeme = $(this).attr("data-id");
-        var folderTheme = $(this).attr("data-folder");
-        var data = {id:idTeme,folder:folderTheme};
-        var url = admin_url + a_mod + '/delete-theme';
-        themeDelete(data, url)
-    });
-
-    function themeDelete(data,uri){
-        var dataPk = data;
-        var dataUrl = uri;
-        getLangJSON().done(function(lang){
-            var _txtTitle = '<strong>'+lang.modal['delete_title']+'</strong>';
-            var _txtContent = lang.modal['delete_content'];
-            var _btnDelete = '<i class="icon-bin mr-2"></i>'+lang.button['delete'];
-            var _btnCancel = lang.button['cancel'];
-            swal.fire({
-                type: 'warning',
-                position: 'top',
-                title: _txtTitle,
-                text: _txtContent,
-                showCloseButton: true,
-                buttonsStyling: false,
-                showCancelButton: true,
-                showConfirmButton: true,
-                confirmButtonClass: 'btn btn-danger',
-                cancelButtonClass: 'btn btn-default',
-                confirmButtonText: _btnDelete,
-                cancelButtonText: _btnCancel,
-                showLoaderOnConfirm: true,
-                preConfirm: function() {
-                    return new Promise(function(resolve, reject) {
-                        $.ajax({
-                            type: 'POST',
-                            url: dataUrl,
-                            dataType: 'json',
-                            data: {data: dataPk},
-                            cache: false,
-                            success:function(response) {
-                                if (response['success']==true) {
-                                    $('#theme-item-'+response['dataDelete']).remove()
-                                    resolve();                              
-                                } else {
-                                    Swal.fire({
-                                        position: 'top',
-                                        type: 'error',
-                                        title: 'Error',
-                                        showConfirmButton: false,
-                                        timer: 2500
-                                    })
-                                    setTimeout(function() {
-                                        resolve();
-                                    }, 1000000);
-                                };
-                            }
-                        });
+function themeDelete(data,uri){
+    var dataPk = data;
+    var dataUrl = uri;
+    getLangJSON().done(function(lang){
+        var _txtTitle = '<strong>'+lang.modal['delete_title']+'</strong>';
+        var _txtContent = lang.modal['delete_content'];
+        var _btnDelete = '<i class="icon-bin mr-2"></i>'+lang.button['delete'];
+        var _btnCancel = lang.button['cancel'];
+        swal.fire({
+            type: 'warning',
+            position: 'top',
+            title: _txtTitle,
+            text: _txtContent,
+            showCloseButton: true,
+            buttonsStyling: false,
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonClass: 'btn btn-danger',
+            cancelButtonClass: 'btn btn-default',
+            confirmButtonText: _btnDelete,
+            cancelButtonText: _btnCancel,
+            showLoaderOnConfirm: true,
+            preConfirm: function() {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        type: 'POST',
+                        url: dataUrl,
+                        dataType: 'json',
+                        data: {data: dataPk},
+                        cache: false,
+                        success:function(response) {
+                            if (response['success']==true) {
+                                $('#theme-item-'+response['dataDelete']).remove()
+                                resolve();                              
+                            } else {
+                                Swal.fire({
+                                    position: 'top',
+                                    type: 'error',
+                                    title: 'Error',
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                })
+                                setTimeout(function() {
+                                    resolve();
+                                }, 1000000);
+                            };
+                        }
                     });
-                },
-            }).then( (result) => {
-                if (result.value) {
-                    Swal.fire({
-                        position: 'top',
-                        type: 'success',
-                        title: lang.message['delete_success'],
-                        showConfirmButton: false,
-                        timer: 2100
-                    })
-                }
-                else{}
-            })
-        });
-    }
-
-
-
-
-
-    $(".modal_active").click(function() {
-        var idActive = $(this).attr("idActive");
-        $('#idActive').val(idActive);
-        $('#modal_active').modal('show');
+                });
+            },
+        }).then( (result) => {
+            if (result.value) {
+                Swal.fire({
+                    position: 'top',
+                    type: 'success',
+                    title: lang.message['delete_success'],
+                    showConfirmButton: false,
+                    timer: 2100
+                })
+            }
+            else{}
+        })
     });
+}
 
-    $(".create_file").click(function() {
-        $('#modal_create_file').modal('show');
-    });  
-
-
-
-
+$(".modal_active").click(function() {
+    var idActive = $(this).attr("idActive");
+    $('#idActive').val(idActive);
+    $('#modal_active').modal('show');
 });
 
+$(".create_file").click(function(e) {
+    e.preventDefault();
+    $('#modal_create_file').modal('show');
+});
 
+$(".backup_theme").click(function(e) {
+    e.preventDefault();
+    var self = $(this); 
+    var id = self.attr('data-theme-id');
+    var folder = self.attr('data-theme-folder');
+    var title = self.attr('data-theme-title');
+    self.find('i').removeClass().addClass('icon-spinner2 spinner');
+    $.ajax({
+        url: window.location.href + '/backup',
+        type: 'POST',
+        dataType: 'JSON',
+        data:{
+            id: id,
+            folder: folder,
+            title: title,
+        },
+        cache: false,
+        success: function(response){
+            if (response['status']==true) {
+                window.open(response['file'], '_blank');
+            };
 
-
-
-
-
-
-
-
-
+            self.find('i').removeClass().addClass('fa fa-download');
+        }
+    });
+});

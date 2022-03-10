@@ -2,24 +2,19 @@
 <div class="page-header page-header-light">
 	<div class="page-header-content header-elements-inline">
 		<div class="page-title">
-			<h3>
-				<span class="font-weight-semibold"><?=lang_line('mod_title');?></span>
-			</h3>
+			<h3><span class="font-weight-semibold"><?php echo lang_line('mod_title');?></span></h3>
 		</div>
 	</div>
 	<div class="breadcrumb-line breadcrumb-line-light">
 		<div class="breadcrumb">
-			<a href="<?=admin_url('home');?>" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> <?=lang_line('admin_link_home');?></a>
-			<span class="breadcrumb-item"><?=lang_line('mod_title');?></span>
-			<span class="breadcrumb-item"><?=lang_line('mod_title_all');?></span>
+			<a href="<?php echo admin_url('home');?>" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> <?php echo lang_line('admin_link_home');?></a>
+			<span class="breadcrumb-item"><?php echo lang_line('mod_title');?></span>
+			<span class="breadcrumb-item"><?php echo lang_line('mod_title_all');?></span>
 		</div>
 	</div>
 </div>
-
 <div class="content">
-
 	<?php echo $this->alert->show($this->mod); ?>
-	
 	<div class="block">
 		<div class="block-header">
 			<h3><?php echo lang_line('mod_title_all'); ?></h3>
@@ -28,14 +23,12 @@
 				<span class="button btn-sm btn-default c_blank_theme"><i class="fa fa-magic"></i> <?php echo lang_line('button_create_blank_theme');?></span>
 			</div>
 		</div>
-
-
 		<div class="row">
 			<?php
 				foreach ( $all_themes as $res ):
 					$img_preview = ( file_exists(CONTENTPATH.'/themes/'.$res['folder'].'/preview.jpg') ? content_url('themes/'.$res['folder'].'/preview.jpg') : content_url('images/noimage.jpg') );
 			?>
-			<div id="theme-item-<?=$res['id'];?>" class="col-lg-3">
+			<div id="theme-item-<?php echo $res['id'];?>" class="col-lg-3">
 				<div class="card">
 					<div class="card-body text-center">
 						<style>
@@ -56,7 +49,7 @@
 						</style>
 						<p><?php echo $res['title'];?></p>
 						<div class="theme-img-card">
-							<a href="<?=$img_preview;?>" title="<?php echo $res['title'];?>" class="fancybox" data-fancybox-group="">
+							<a href="<?php echo $img_preview;?>" title="<?php echo $res['title'];?>" class="fancybox" data-fancybox-group="">
 								<img src="<?php echo $img_preview;?>" style="width:100%;" alt="<?php echo $res['title'];?>">
 							</a>
 						</div>
@@ -73,8 +66,10 @@
 							
 							<a href="<?php echo admin_url($this->mod.'/edit/'.$res['id'].'/home');?>" class="button btn-flat btn-sm btn-default alertedit" data-toggle="tooltip" title="<?php echo lang_line('button_edit');?>"><i class="fa fa-edit"></i></a>
 
+							<span class="button btn-flat btn-sm btn-default backup_theme" data-toggle="tooltip" data-title="Download" data-theme-id="<?php echo encrypt($res['id']);?>" data-theme-folder="<?php echo encrypt($res['folder']);?>" data-theme-title="<?php echo encrypt($res['title']);?>"><i class="fa fa-download"></i></span>
+
 							<?php if ($res['active'] == 'N'): ?>
-							<span class="button btn-flat btn-sm btn-default delete_theme" data-toggle="tooltip" data-title="<?=lang_line('button_delete');?>" data-id="<?=encrypt($res['id']);?>" data-folder="<?=encrypt($res['folder']);?>"><i class="fa fa-trash"></i></span>
+							<span class="button btn-flat btn-sm btn-default delete_theme" data-toggle="tooltip" data-title="<?php echo lang_line('button_delete');?>" data-id="<?php echo encrypt($res['id']);?>" data-folder="<?php echo encrypt($res['folder']);?>"><i class="fa fa-trash"></i></span>
 							<?php endif ?>
 						</div>
 					</div>

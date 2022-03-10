@@ -1,11 +1,15 @@
 <?php error_reporting(E_ALL ^ E_DEPRECATED);
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
-$protocol = !empty($_SERVER["HTTPS"]) ? 'https://' : 'http://';
-$po_url = $protocol.$_SERVER['HTTP_HOST'];
-$po_url .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
-$config['base_url'] = $po_url;
+// $protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,5))=='https://'?'https://':'http://';
+// $protocol = !empty($_SERVER["HTTPS"]) ? 'https://' : 'http://';
+// $po_url = $protocol.$_SERVER['HTTP_HOST'];
+// $po_url .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+// $config['base_url'] = $po_url;
+
+@$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+@$config['base_url'] .= "://" . $_SERVER['HTTP_HOST'];
+@$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 
 $config['index_page'] = '';
 
