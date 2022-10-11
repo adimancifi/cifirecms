@@ -1,54 +1,70 @@
-# CiFireCMS - Makes You Feel Home
-CiFireCMS adalah platform CMS open source gratis dibuat dengan framework CodeIgniter3. CiFireCMS sangat cocok bagi pengguna yang familiar dengan engine PopojiCMS namun ingin merasakan performa dari framework CodeIgniter3.
+# CiFireCMS - Gratis Rasa Premium
+CiFireCMS is a open source PHP web framework, using the CodeIgniter3 framework with an interesting concept and easy to use by anyone.
 
-## Sersyaratan System
-CiFireCMS baik dijalankan pada web server Apache 2.4.x PHP 7.3.x dan PHP 5.6.x (PHP 5.6-Native Not recommended).
 
-#### Ekstensi PHP yang harus diperhatikan
-* pdo_mysql  ``ON``
-* pdo_sqlite ``ON``
-* json       ``ON``
-* fileinfo   ``ON``
-* intl       ``ON``
-
-## Instalasi
-1. Download source code CiFireCMS dari github atau dari situs resmi https://www.alweak.com. Pastikan ekstensi file adalah ``zip`` jika bukan silahkan ubah dan sesuaikan nama ekstensinya.
-2. Extract file cifirecms.zip di directory web Anda. Pastikan file ``.htaccess`` ter-copy dengan baik.
-3. Buat database baru untuk menampung semua tabel konfigurasi CiFireCMS.
+## Minimum System Requirements
 ```
-# konfigurasi databse.
-Database  = db_database
-Collation = utf8_general_ci
+
+### Server Requirement
++--------------+-----------------+
+|  System      |  Version        |
++--------------+-----------------+
+|  Web server  |  Apache 2.4.x   |
+|  PHP         |  5.6.x - 7.3.x  |
+|  MySQL       |  5.7.x - 8.x    |
+|  MariaDB     |  10.3.x         |
++--------------+-----------------+
 ```
-4. Jalankan browser dan masuk ke alamat web anda. Jika tidak ada kesalahan, anda akan langsung di arahkan ke halaman instalasi CiFireCMS.
-5. Ikuti dengan benar prosedur dan langkah-langkah instalasi.
-6. Jika instalasi sudah selesai dan berhasil, jangan lupa untuk menghapus folder ``install`` dan file-file lainnya selain file ``index.php`` dan ``.htaccess``.
-7. CiFireCMS siap digunakan.
 
 
-## Konfigurasi Lanjutan
-
-### Permission
-Ubah user permission pada folder berikut menjadi 775.
+### PHP Extension
 ```
-folder-web-anda
-├── content
-│   ├── tmp     --> 775
++--------------+----------+
+|  Extension   |  Config  |
++--------------+----------+
+|  pdo_mysql   |  ON      |
+|  pdo_sqlite  |  ON      |
+|  pdo_sqlite  |  ON      |
+|  json        |  ON      |
+|  fileinfo    |  ON      |
+|  intl        |  ON      |
+|  gd2         |  ON      |
+|  mbstring    |  ON      |
++--------------+----------+
+```
+
+
+## Installation
+- Put source code in your web directory. Make sure the `.htaccess` file is copied correctly.
+- Create a new database from your DBMS application.
+- Launch your browser and enter the url of your website.
+- Follow the installation steps.
+- After completing the installation process, please delete other files from root directory, 
+  except `index.php` and `.htaccess` and `environment.php` files.
+
+
+## Permission
+Change permission for folder below to ``775``.
+```
+cifirecms
+├── l-content
+│   ├── temp    --> 775
 │   ├── thumbs  --> 775
 └── └── uploads --> 775
 ```
 
-### Redirect
-Konfigurasi file **.htaccess** standart seperti berikut.
+## .htaccess
+Standard **.htaccess** configuration.
 ```
 RewriteEngine On
 RewriteCond $1 !^(index\.php|resources|robots\.txt)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 ```
 
-Untuk menentukan web anda di akses dengan alamat **http** atau **https** silahkan ubah konfigurasi file **.htaccess** tambahkan kode berikut di bawah baris kode ``RewriteEngine On``.
+To set your website accessible by **http** or **https** please change the configuration file **.Htaccess** add the following code below the ``RewriteEngine On`` code line.
+
 
 #### Redirect HTTP to HTTPS
 
@@ -81,45 +97,28 @@ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^ http://%1%{REQUEST_URI} [L,NE,R=301]
 ```
 
-### Production
-Jika web sudah di online-kan silahkan ubah kode pada **index.php**
-Cari baris kode berikut :
+### Environment
+If the web is ready online, please change the code in ``environment.php`` Search for the following line of code:
 ```
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 ```
-Ubah menjadi seperti berikut :
+Change to :
 ```
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 ```
 
-## Halaman Administrator
 
-* Masuk ke alamat ``http://nama-web-anda/l-admin``
-* Masukkan data login seperti yg telah diinputkan pada saat proses instalasi.
+## Backend
 
-#### Konfigurasi Mail SMTP.
-```
- protocol    = SMTP or smtp
- smtp_host   = ssl://nama.smtp.host
- smtp_port   = 465
- smtp_crypto = ssl
- mailtype    = html
- charset     = iso-8859-1
-```
-
-# Terima Kasih Kepada
-1. Tuhan Yang Maha Esa.
-2. Semua rekan-rekan yang berkontribusi untuk CiFireCMS.
-3. Codeigniter3 sebagai inti engine CiFireCMS.
-4. Cizthemes (greeky) sebagai pembuat template frontend.
-5. SemiColonWeb (Canvas) sebagai pembuat template frontend.
-6. Kopyov (Limitless) sebagai pembuat template backend.
-7. Creative-tim (Light Bootstrap Dashboard) sebagai pembuat template dasbor member.
-8. Easy Menu Manager sebagai pembuat component menu manager.
-9. Jquery, Bootstrap dan semua plugins jquery yang dipakai pada CiFireCMS.
-10. DwiraSurvivor PopojiCMS untuk inspirasi, saran serta rekomendasi sehingga engine CiFireCMS bisa rilis.
+* Backend url ``http://your-web-domain/l-admin``
+* For first login, please enter the login data same as the installation process.
 
 
-# Lisensi
+## Official Links
+* GitHub         : https://github.com/CiFireCMS
+* Facebook       : https://web.facebook.com/cifirecms
+* Facebook group : https://web.facebook.com/groups/cifirecms
 
-CiFireCMS dilisensikan di bawah MIT License.
+
+## License
+CiFireCMS is licensed under the MIT License.

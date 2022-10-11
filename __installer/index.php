@@ -1,5 +1,5 @@
 <?php
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 switch (ENVIRONMENT)
 {
@@ -27,8 +27,8 @@ switch (ENVIRONMENT)
 		exit(1); // EXIT_ERROR
 }
 
-$system_path        = 'system';
-$application_folder = 'install/application';
+$system_path        = 'l-system';
+$application_folder = 'l-install/app';
 $view_folder        = '';
 
 // Set the current directory correctly for CLI requests
