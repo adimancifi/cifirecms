@@ -1,5 +1,5 @@
 # CiFireCMS - Gratis Rasa Premium
-CiFireCMS is a open source PHP web framework, using the CodeIgniter3 framework with an interesting concept and easy to use by anyone.
+CiFireCMS adalah platform CMS open source gratis Indonesia dibuat menggunakan framework CodeIgniter3 dengan konsep yang menarik dan mudah digunakan.
 
 
 ## Minimum System Requirements
@@ -34,24 +34,26 @@ CiFireCMS is a open source PHP web framework, using the CodeIgniter3 framework w
 ```
 
 
-## Installation
-- Put source code in your web directory. Make sure the `.htaccess` file is copied correctly.
-- Create a new database from your DBMS application.
-- Launch your browser and enter the url of your website.
-- Follow the installation steps.
-- After completing the installation process, please delete other files from root directory, 
-  except `index.php` and `.htaccess` and `environment.php` files.
-
-
 ## Permission
-Change permission for folder below to ``775``.
+Ubah user permission folder dan file berikut menjadi ``0777``.
 ```
 cifirecms
-├── l-content
-│   ├── temp    --> 775
-│   ├── thumbs  --> 775
-└── └── uploads --> 775
+├── app/
+│   ├── cache  -->  777
+│   └── config
+│   │   └── routes
+│   │       └── slug_routes.php  -->  777
+│   ├── controllers  -->  777 (semua folder dan file)
+│   ├── language  -->  777 (semua folder dan file)
+│   ├── logs  -->  777
+│   ├── models  -->  777 (semua folder dan file)
+│   └── views
+│       ├── mod  -->  777 (semua folder dan file)
+│       ├── themes  -->  777 (semua folder dan file)
+│       └── meta_social.php  -->  777
+└── public  -->  0777 (semua folder dan file)
 ```
+
 
 ## .htaccess
 Standard **.htaccess** configuration.
@@ -63,7 +65,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 ```
 
-To set your website accessible by **http** or **https** please change the configuration file **.Htaccess** add the following code below the ``RewriteEngine On`` code line.
+Untuk menentukan web anda di akses dengan alamat **http** atau **https** silahkan ubah konfigurasi file **.htaccess** dan tambahkan kode berikut di bawah baris kode ``RewriteEngine On``.
 
 
 #### Redirect HTTP to HTTPS
@@ -82,6 +84,7 @@ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^ https://%1%{REQUEST_URI} [L,NE,R=301]
 ```
 
+
 #### Redirect HTTPS to HTTP
 ```
 # non-www to www.
@@ -97,27 +100,14 @@ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^ http://%1%{REQUEST_URI} [L,NE,R=301]
 ```
 
+
 ### Environment
-If the web is ready online, please change the code in ``environment.php`` Search for the following line of code:
-```
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-```
-Change to :
-```
-define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
-```
+Jika web sudah siap di online-kan silahkan ubah kode pada ``.env`` cari code ``CI_ENV=development`` ubah menadi ``CI_ENV=production``
 
 
-## Backend
-
-* Backend url ``http://your-web-domain/l-admin``
-* For first login, please enter the login data same as the installation process.
-
-
-## Official Links
-* GitHub         : https://github.com/CiFireCMS
-* Facebook       : https://web.facebook.com/cifirecms
-* Facebook group : https://web.facebook.com/groups/cifirecms
+## Admin
+* Untuk mengakses halaman administrator kunjungi link ``http://your-web-domain/l-admin``
+* Masukan Username dan Password sesuai konfigurasi pada awal instalasi.
 
 
 ## License
